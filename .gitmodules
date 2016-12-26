@@ -1,0 +1,9 @@
+[submodule "mglw"]
+	path = mglw
+	url = ../mglw
+[submodule "libft"]
+	path = libft
+	url = ../libft
+[submodule "mathex"]
+	path = mathex
+	url = ../mathex
