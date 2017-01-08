@@ -6,34 +6,55 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2016/12/23 19:09:10 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/08 13:35:46 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef WOLF3D_H
 # define WOLF3D_H
 
+# define BUFF_SIZE 0x1000
 # include "libft.h"
 # include "mglw/mglw.h"
-#include "vector.h"
+# include "vector.h"
 
 # define W3D_DEBUG		0x01
 # define W3D_TEXTURE	0x02
+# define W3D_MINIMAP	0x04
 
-typedef struct s_octree_node	t_oxn;
+typedef struct s_octree_node		t_oxn;
+typedef struct s_ray				t_ray;
 
-typedef struct s_wolf3d_main	t_w3d;
-typedef struct s_wolf3d_lvl		t_w3dlvl;
+typedef struct s_wolf3d_main		t_w3d;
+typedef struct s_wolf3d_event		t_w3devt;
 
-typedef enum	e_wolf3d_lvl_type
+typedef union u_wolf3d_layers		t_w3dl;
+typedef struct s_wolf3d_layer		t_w3dlay;
+typedef struct s_wolf3d_basic_lvl	t_w3dlvl;
+typedef struct s_wolf3d_gui_page	t_w3dgp;
+typedef struct s_wolf3d_gui_element	t_w3dge;
+typedef struct s_wolf3d_menu		t_w3dgui;
+
+# define W3D_LAYERTYPENUM 6
+
+typedef enum	e_wolf3d_layer_type
 {
-	W3D_LVL = 0,
+	W3D_ERROR = 0,
+	W3D_LVL,
 	W3D_ADVLVL,
 	W3D_MENU,
 	W3D_IG_MENU,
 	W3D_MAP,
-	W3D_LOADING
-}				t_w3d_lt;
+	W3D_LOADING,
+}				t_w3dlty;
+
+struct			s_wolf3d_event
+{
+	int			keycode;
+	int			status;
+	int			x;
+	int			y;
+};
 
 struct			s_octree_node
 {
@@ -44,19 +65,79 @@ struct			s_octree_node
 	void		*br;
 };
 
-struct			s_wolf3d_lvl
+struct			s_ray
 {
-	t_w3d_lt	type;
+	t_v2f		start;
+	t_v2f		dir;
+	t_v2f		end;
+	t_v2ui		grid_id;
+};
+
+struct			s_wolf3d_layer
+{
+	t_w3dlty	type;
 	int			flags;
+	int			(*drawer)(t_w3dl *lay, t_w3d *w3d);
+	int			(*evt_process)(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
 };
 
 struct			s_wolf3d_basic_lvl
 {
-	t_w3dlvl	lvl;
+	t_w3dlay	layer;
 	t_v2ui		size;
 	t_v2f		height;
 	int			**lvl_data;
 	int			**octree;
+};
+
+typedef enum	e_wolf3d_gui_element_type
+{
+	W3DGUI_BUTTON = 0,
+	W3DGUI_BOX,
+	W3DGUI_TEXT,
+	W3DGUI_TEXTINPUT
+}				t_w3dguit;
+
+# define W3DGUI_ALPHA		0x1
+# define W3DGUI_ANIMATED	0x2
+
+struct			s_wolf3d_gui_element
+{
+	t_w3dguit	type;
+	int			flags;
+	t_v2i		position;
+	t_v2i		size;
+	mglimg		*gdata;
+	t_v4ui		sprite;
+	t_v2ui		numbers;
+};
+
+# define W3DGUI_BUFFER		0x100
+# define W3DGUI_INTERACTIVE	0x200
+
+struct			s_wolf3d_gui_page
+{
+	int			length;
+	int			flags;
+	t_w3dge		*elements;
+};
+
+struct			s_wolf3d_menu
+{
+	t_w3dlay	layer;
+	int			glen;
+	int			plen;
+	int			elen;
+	mglimg		**gdata;
+	t_w3dgp		**pages;
+	t_w3dge		**elements;
+};
+
+union			u_wolf3d_layers
+{
+	t_w3dlay	layer;
+	t_w3dlvl	level;
+	t_w3dgui	gui;
 };
 
 struct			s_wolf3d_main
@@ -65,6 +146,33 @@ struct			s_wolf3d_main
 	int			padding;
 	mglwin		*win;
 	mglimg		*screen;
+	int			laynum;
+	int			active_laynum;
+	t_w3dl		*layers;
+	t_w3dl		*active_layers[32];
 };
+
+t_w3dl			w3d_parse(t_w3d *w3d, const char *path);
+
+int				w3d_keypress(void *root, int k);
+int				w3d_keyrepeate(void *root, int k);
+int				w3d_keyrelease(void *root, int k);
+void			w3d_layer_evt_process(t_w3d *w3d, t_w3devt evt);
+
+void			w3d_layer_draw(t_w3d *w3d);
+
+int				w3d_error_mgr(t_w3d *w3d, int error, const char *message);
+
+t_w3dl			w3d_create_lvl(t_w3d *w3d);
+int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d);
+int				w3d_event_process_lvl(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
+t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
+t_w3dl			w3d_delete_lvl(void);
+
+t_w3dl			w3d_create_gui(t_w3d *w3d);
+int				w3d_draw_gui(t_w3dl *lay, t_w3d *w3d);
+int				w3d_event_process_gui(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
+t_w3dl			w3d_parse_gui(t_w3d *w3d, const char *path, t_w3dl layer);
+t_w3dl			w3d_delete_gui(void);
 
 #endif

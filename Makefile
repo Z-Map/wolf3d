@@ -6,7 +6,7 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2016/12/23 01:52:06 by qloubier         ###   ########.fr        #
+#    Updated: 2017/01/06 17:39:31 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ ifndef config
   config=release
 endif
 ifeq ($(config),debug)
-  CFLAGS+=-g3 -fsanitize=address
+  CFLAGS+=-O1 -g -fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls
 endif
 ifeq ($(config),release)
   CFLAGS+=-Ofast
@@ -34,7 +34,16 @@ endif
 SILENT		= @
 BUILDDIR	= build
 SRCDIR		= src
-SRCS		= main.c
+SRCS		= main.c\
+			draw.c\
+			draw_level.c\
+			events.c\
+			event_level.c\
+			menu.c\
+			parser.c\
+			parse_menu.c\
+			parse_level.c
+
 OBJ			= $(subst /,~,$(SRCS:%.c=%.o))
 
 LIBDIRS		= $(shell dirname $(LIBS))
