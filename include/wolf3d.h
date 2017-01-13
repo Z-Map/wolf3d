@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/08 13:35:46 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/13 17:51:18 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 # define BUFF_SIZE 0x1000
 # include "libft.h"
 # include "mglw/mglw.h"
-# include "vector.h"
+# include "mathex/vector.h"
+# include "mathex/utils.h"
 
 # define W3D_DEBUG		0x01
 # define W3D_TEXTURE	0x02
@@ -27,6 +28,9 @@ typedef struct s_ray				t_ray;
 
 typedef struct s_wolf3d_main		t_w3d;
 typedef struct s_wolf3d_event		t_w3devt;
+typedef struct s_wolf3d_player		t_w3dpc;
+typedef struct s_wolf3d_box			t_w3dbox;
+typedef struct s_wolf3d_map			t_w3dmap;
 
 typedef union u_wolf3d_layers		t_w3dl;
 typedef struct s_wolf3d_layer		t_w3dlay;
@@ -34,27 +38,6 @@ typedef struct s_wolf3d_basic_lvl	t_w3dlvl;
 typedef struct s_wolf3d_gui_page	t_w3dgp;
 typedef struct s_wolf3d_gui_element	t_w3dge;
 typedef struct s_wolf3d_menu		t_w3dgui;
-
-# define W3D_LAYERTYPENUM 6
-
-typedef enum	e_wolf3d_layer_type
-{
-	W3D_ERROR = 0,
-	W3D_LVL,
-	W3D_ADVLVL,
-	W3D_MENU,
-	W3D_IG_MENU,
-	W3D_MAP,
-	W3D_LOADING,
-}				t_w3dlty;
-
-struct			s_wolf3d_event
-{
-	int			keycode;
-	int			status;
-	int			x;
-	int			y;
-};
 
 struct			s_octree_node
 {
@@ -71,7 +54,72 @@ struct			s_ray
 	t_v2f		dir;
 	t_v2f		end;
 	t_v2ui		grid_id;
+	t_v3f		normale;
+	float		distance;
 };
+
+struct			s_wolf3d_event
+{
+	int			keycode;
+	int			status;
+	int			x;
+	int			y;
+};
+
+# define W3D_PCK_FW		0x1
+# define W3D_PCK_BW		0x2
+# define W3D_PCK_LE		0x4
+# define W3D_PCK_RI		0x8
+# define W3D_PCK_LLE	0x10
+# define W3D_PCK_LRI	0x20
+
+struct			s_wolf3d_player
+{
+	t_ui		movkey;
+	t_ui		flags;
+	t_v3f		position;
+	float		speed;
+	t_v3f		movement;
+	t_v3f		eyes;
+	t_v2f		look;
+};
+
+# define W3D_BLOC_WALL		0x1
+# define W3D_BLOC_COLLIDER	0x2
+# define W3D_BLOC_TEX		0x4
+# define W3D_BLOC_ACTIVATOR	0x8
+
+struct			s_wolf3d_box
+{
+	t_ui		flags;
+	int			userid;
+	t_rgba		color;
+	mglimg		*tex;
+};
+
+struct			s_wolf3d_map
+{
+	t_ui		bloclen;
+	int			flags;
+	t_v2ui		position;
+	t_v2ui		size;
+	t_v2f		height;
+	t_w3dbox	*blocs;
+	int			**grid;
+};
+
+# define W3D_LAYERTYPENUM 6
+
+typedef enum	e_wolf3d_layer_type
+{
+	W3D_ERROR = 0,
+	W3D_LVL,
+	W3D_ADVLVL,
+	W3D_MENU,
+	W3D_IG_MENU,
+	W3D_MAP,
+	W3D_LOADING,
+}				t_w3dlty;
 
 struct			s_wolf3d_layer
 {
@@ -86,8 +134,11 @@ struct			s_wolf3d_basic_lvl
 	t_w3dlay	layer;
 	t_v2ui		size;
 	t_v2f		height;
-	int			**lvl_data;
-	int			**octree;
+	int			level_num;
+	int			padding;
+	t_w3dpc		player;
+	t_w3dmap	*lvl_data;
+	int			***octree;
 };
 
 typedef enum	e_wolf3d_gui_element_type
