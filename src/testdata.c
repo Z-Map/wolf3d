@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:08:22 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/12 22:10:45 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/13 19:45:01 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static struct			s_testdata
 	t_w3dlvl			testlvl;
 	t_w3dmap			maps[5];
 	int					leveldata[10][10];
+	int					*leveldataptr[10];
 	t_w3dl				layers[10];
 }						G_TESTDATA = {
 	.testlvl = {
@@ -89,13 +90,25 @@ static struct			s_testdata
 		{ -1, 0, 1, 0, 1, 0, 0, 0, 0, -1 },
 		{ -1, 0, 0, 1, 1, 2, 2, 0, 0, -1 },
 		{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 }
-	}
+	},
+	.leveldataptr = { NULL, NULL, NULL, NULL, NULL,
+		NULL, NULL, NULL, NULL, NULL}
 };
 
 static void		init_testdata(t_w3d *w3d)
 {
 	G_TESTDATA.testlvl.lvl_data = G_TESTDATA.maps;
-	G_TESTDATA.testlvl.lvl_data->grid = (int **)G_TESTDATA.leveldata;
+	G_TESTDATA.leveldataptr[0] = G_TESTDATA.leveldata[0];
+	G_TESTDATA.leveldataptr[1] = G_TESTDATA.leveldata[1];
+	G_TESTDATA.leveldataptr[2] = G_TESTDATA.leveldata[2];
+	G_TESTDATA.leveldataptr[3] = G_TESTDATA.leveldata[3];
+	G_TESTDATA.leveldataptr[4] = G_TESTDATA.leveldata[4];
+	G_TESTDATA.leveldataptr[5] = G_TESTDATA.leveldata[5];
+	G_TESTDATA.leveldataptr[6] = G_TESTDATA.leveldata[6];
+	G_TESTDATA.leveldataptr[7] = G_TESTDATA.leveldata[7];
+	G_TESTDATA.leveldataptr[8] = G_TESTDATA.leveldata[8];
+	G_TESTDATA.leveldataptr[9] = G_TESTDATA.leveldata[9];
+	G_TESTDATA.testlvl.lvl_data->grid = G_TESTDATA.leveldataptr;
 	G_TESTDATA.layers[0].level = G_TESTDATA.testlvl;
 	w3d->layers = G_TESTDATA.layers;
 	w3d->active_layers[0] = G_TESTDATA.layers;

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/13 17:51:18 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/13 19:34:27 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define BUFF_SIZE 0x1000
 # include "libft.h"
+#include <math.h>
 # include "mglw/mglw.h"
 # include "mathex/vector.h"
 # include "mathex/utils.h"
@@ -211,6 +212,8 @@ int				w3d_keyrelease(void *root, int k);
 void			w3d_layer_evt_process(t_w3d *w3d, t_w3devt evt);
 
 void			w3d_layer_draw(t_w3d *w3d);
+float			w3d_rayboxstep(const t_ray *ray, t_v2i *idx);
+float			w3d_raycast(t_w3dmap *map, t_ray *ray);
 
 int				w3d_error_mgr(t_w3d *w3d, int error, const char *message);
 
@@ -219,6 +222,8 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d);
 int				w3d_event_process_lvl(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
 t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
 t_w3dl			w3d_delete_lvl(void);
+
+t_w3dbox		*w3d_getlvlbox(t_w3dmap *map, t_v2ui idx);
 
 t_w3dl			w3d_create_gui(t_w3d *w3d);
 int				w3d_draw_gui(t_w3dl *lay, t_w3d *w3d);

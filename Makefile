@@ -6,7 +6,7 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2017/01/06 17:39:31 by qloubier         ###   ########.fr        #
+#    Updated: 2017/01/13 19:09:20 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ OPSYS		= $(shell uname -s)
 NAME		= wolf3d
 PROJECTNAME	= wolf3d
 LIBS		= libft/libft.a mathex/libmathex.a mglw/libmglw.a
+LIBFLAGS	= -lm
 INCDIR		= -Iinclude
 CFLAGS		= -Wall -Wextra -Werror
 
@@ -39,6 +40,7 @@ SRCS		= main.c\
 			draw_level.c\
 			events.c\
 			event_level.c\
+			raycast.c\
 			menu.c\
 			parser.c\
 			parse_menu.c\
@@ -48,7 +50,7 @@ OBJ			= $(subst /,~,$(SRCS:%.c=%.o))
 
 LIBDIRS		= $(shell dirname $(LIBS))
 INCDIR		+= $(LIBDIRS:%=-I%/include)#-Imglw/include -Imathex/include -Ilibft/include
-LIBFLAGS	= $(LIBDIRS:%=-L%) $(shell basename -as .a $(LIBS) | sed -e "s/lib/-l/g")
+LIBFLAGS	+= $(LIBDIRS:%=-L%) $(shell basename -as .a $(LIBS) | sed -e "s/lib/-l/g")
 INTERN_SRCS	= $(SRCS:%=$(SRCDIR)/%)
 INTERN_OBJ	= $(OBJ:%=$(BUILDDIR)/%)
 INTERN_DEP	= $(INTERN_OBJ:%.o=%.d)
