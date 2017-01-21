@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:08:22 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/21 05:18:38 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/21 08:38:54 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,12 @@ static void		init_testdata(t_w3d *w3d)
 	G_TESTDATA.textures[0] = mglw_loadimage("pixwall.png", 0, 4);
 	G_TESTDATA.maps->blocs[1].flags |= W3D_BLOC_TEX;
 	G_TESTDATA.maps->blocs[1].tex = G_TESTDATA.textures[0];
+	G_TESTDATA.textures[1] = mglw_loadimage("pixgreenwall.png", 0, 4);
+	G_TESTDATA.maps->blocs[2].flags |= W3D_BLOC_TEX;
+	G_TESTDATA.maps->blocs[2].tex = G_TESTDATA.textures[1];
+	G_TESTDATA.textures[2] = mglw_loadimage("limitwall.png", 0, 4);
+	G_TESTDATA.maps->blocs[3].flags |= W3D_BLOC_TEX;
+	G_TESTDATA.maps->blocs[3].tex = G_TESTDATA.textures[2];
 	w3d->layers = G_TESTDATA.layers;
 	w3d->active_layers[0] = G_TESTDATA.layers;
 	w3d->laynum = 1;
