@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/20 16:22:28 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/21 07:12:13 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 	if ((!mglw_init()) ||
 		(!(w3d->win = mglw_openwin(
 			mglw_mkwin(MGLW_LEGACY_MODE,
-				MGLW_2DLAYER | MGLW_FULLSCREEN | MGLW_FULLRES),
+				MGLW_2DLAYER), //| MGLW_FULLSCREEN | MGLW_FULLRES),
 			800, 600, "~*( Wolf3D )*~"))))
 		return (-1);
 	mglw_setsetting(MGLWS_EXITKEY, MGLW_KEY_ESCAPE);

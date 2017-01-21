@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/15 03:08:30 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/21 05:49:17 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ struct			s_ray
 	t_v2ui		grid_id;
 	t_v3f		normale;
 	float		distance;
+	t_w3dbox	*bloc;
 };
 
 struct			s_wolf3d_event

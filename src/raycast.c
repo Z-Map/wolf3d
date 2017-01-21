@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/07 14:37:57 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/13 19:50:28 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/21 05:50:29 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,6 @@ float			w3d_raycast(t_w3dmap *map, t_ray *ray)
 	else
 		ray->end = (t_v2f){ray->start.x + (ray->distance * ray->dir.x),
 			ray->start.y + (ray->distance * ray->dir.y)};
+	ray->bloc = box;
 	return (ray->distance);
 }
