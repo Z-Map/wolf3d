@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/13 19:34:27 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/15 03:08:30 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ int				w3d_keypress(void *root, int k);
 int				w3d_keyrepeate(void *root, int k);
 int				w3d_keyrelease(void *root, int k);
 void			w3d_layer_evt_process(t_w3d *w3d, t_w3devt evt);
+void			w3d_set_evtflags(t_ui *flags, t_w3devt evt, t_ui flag);
 
 void			w3d_layer_draw(t_w3d *w3d);
 float			w3d_rayboxstep(const t_ray *ray, t_v2i *idx);
@@ -222,6 +223,7 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d);
 int				w3d_event_process_lvl(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
 t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
 t_w3dl			w3d_delete_lvl(void);
+void			w3d_process_mov(t_w3dpc *player);
 
 t_w3dbox		*w3d_getlvlbox(t_w3dmap *map, t_v2ui idx);
 
