@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/21 06:22:57 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/23 09:50:38 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void			draw_col(mglimg *scr, int column, int height, t_ray *ray)
 
 	// ft_printf("base : %u, %i\noffset : %i\n", scr->y, height, offset);
 	if (ray->bloc->tex)
-		tx = (int)(((ray->end.x  + ray->end.y)
-		- (float)(int)(ray->end.x + ray->end.y)) * ray->bloc->tex->x);
+		tx = (int)((((ray->end.x  + ray->end.y) * 0.5f)
+		- (float)(int)((ray->end.x + ray->end.y) * 0.5f)) * ray->bloc->tex->x);
 	uva = 1.0 / (height + 1);
 	uvb = 0.0;
 	pxs = scr->pixels;
@@ -63,7 +63,7 @@ void			w3d_process_mov(t_w3dpc *player)
 	if (player->movkey & W3D_PCK_FW)
 		player->movement.x = player->speed;
 	else if (player->movkey & W3D_PCK_BW)
-		player->movement.x = -(player->speed);
+		player->movement.x = -player->speed;
 	else
 		player->movement.x = 0.0f;
 	if (player->movkey & W3D_PCK_LE)
@@ -73,9 +73,9 @@ void			w3d_process_mov(t_w3dpc *player)
 	else
 		player->movement.y = 0.0f;
 	if (player->movkey & W3D_PCK_LLE)
-		player->look.x += player->speed;
-	else if (player->movkey & W3D_PCK_LRI)
 		player->look.x -= player->speed;
+	else if (player->movkey & W3D_PCK_LRI)
+		player->look.x += player->speed;
 }
 
 int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
@@ -84,7 +84,7 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 	int			x;
 	double		angle;
 	double		rot;
-	double		a;
+	t_v2f		a;
 	float		dist;
 	t_ray		ray;
 	t_v3f		mv;
@@ -95,11 +95,11 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 	(void)lay;
 	x = w3d->screen->x;
 	angle = -sin(fov / 2.0f);
-	rot = (angle * -2.0f) / (double)x;
+	rot = (angle * -2.0) / (double)x;
 	w3d_process_mov(&(lay->level.player));
 	mv = lay->level.player.movement;
-	mv = (t_v3f){mv.x * look.x - mv.y * look.y,
-		mv.y * look.x + mv.x * look.y, 0.0f};
+	mv = (t_v3f){mv.x * look.x + mv.y * look.y,
+		- mv.y * look.x + mv.x * look.y, 0.0f};
 	pv3faddv3f(&(lay->level.player.position), &mv);
 	// lay->level.player.movement = (t_v3f){0.0f, 0.0f, 0.0f};
 	ray = (t_ray){.start = v3to2f(lay->level.player.position),
@@ -109,16 +109,18 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 	ft_bzero(w3d->screen->pixels, w3d->screen->memlen);
 	while (x--)
 	{
-		a = asin(angle);
-		ray.dir = normalize2f((t_v2f){look.x - (float)angle * look.y,
-			look.x * (float)angle + look.y});
+		a = normalize2f((t_v2f){(float)cos(fov / 2.0f), (float)angle});
+		ray.dir = (t_v2f){look.x * a.x + a.y * look.y,
+			-look.x * a.y + look.y * a.x};
 		dist = w3d_raycast(lay->level.lvl_data, &ray);
-		dist *= normalize2f((t_v2f){1.0, (float)angle}).x;
+		dist *= (float)a.x;
 		// dist *= (float)cos(a);
 		// ft_printf("coucou : % 6.4f\e[20D", cosf((float)angle));
+		// ray.end = (t_v2f){ ray.start.x + ray.dir.x * dist,
+		// 	ray.start.y + ray.dir.y * dist};
 		if (dist > 0.0f)
 			draw_col(w3d->screen, x,
-				round((2.0f / dist) * ((float)w3d->screen->y) / 2.0f), &ray);
+				round(((2.0 * w3d->screen->y) / dist)), &ray);
 		// else if (dist > 0.0f)
 		// 	draw_col(w3d->screen, x, w3d->screen->y,
 		// 		lay->level.lvl_data->blocs[lay->level.lvl_data->grid[

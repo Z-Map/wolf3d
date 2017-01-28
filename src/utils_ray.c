@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   utils_ray.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/07 14:37:57 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/23 08:06:55 by qloubier         ###   ########.fr       */
+/*   Created: 2017/01/27 20:08:57 by qloubier          #+#    #+#             */
+/*   Updated: 2017/01/28 12:50:33 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,39 +41,7 @@ float			w3d_rayboxstep(const t_ray *ray, t_v2i *idx)
 
 }
 
-static int		inrange(t_w3dmap *map, t_v2i idx)
+t_v2f			w3d_ray(const t_ray *ray, t_v2f pos)
 {
-	if ((idx.x < 0) || (idx.y < 0))
-		return (0);
-	else if ((idx.x < (int)map->size.x) || (idx.y < (int)map->size.y))
-		return (1);
-	return (0);
-}
 
-float			w3d_raycast(t_w3dmap *map, t_ray *ray)
-{
-	t_v2ui		idx;
-	t_v2i		nidx;
-	t_w3dbox	*box;
-
-	nidx = (t_v2i){(int)(ray->start.x), (int)(ray->start.y)};
-	idx = (t_v2ui){(unsigned int)nidx.x, (unsigned int)nidx.y};
-	ray->distance = w3d_rayboxstep(ray, &nidx);
-	box = w3dlvl_getbox_vui(map, idx);
-	while (inrange(map, nidx) && box && !(box->flags & W3D_BLOC_WALL))
-	{
-		idx = (t_v2ui){(unsigned int)nidx.x, (unsigned int)nidx.y};
-		box = w3dlvl_getbox_vui(map, idx);
-		if ((!box) || (box->flags & W3D_BLOC_WALL))
-			break ;
-		ray->distance = w3d_rayboxstep(ray, &nidx);
-	}
-	ray->grid_id = idx;
-	if (!box || !(box->flags & W3D_BLOC_WALL))
-		ray->distance = -1.0f;
-	else
-		ray->end = (t_v2f){ray->start.x + (ray->distance * ray->dir.x),
-			ray->start.y + (ray->distance * ray->dir.y)};
-	ray->bloc = box;
-	return (ray->distance);
 }
