@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 14:49:04 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/31 14:41:09 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/31 18:11:21 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,19 @@ static t_v3f	w3d_getphymov(t_w3dlvl *lvl, t_w3dpc pc)
 		- mv.y * look.x + mv.x * look.y, 0.0f};
 	mv.z = mv.x;
 	ray = w3d_mkray((t_v2f){pc.position.x, pc.position.y + mv.y},
-		(t_v2f){(mv.x >= 0.0f) ? 1.0f : -1.0f, 0.0f},
-		RAY_NOLAYER | W3D_BLOC_COLLIDER, mxabsf(mv.x) + 0.25f);
-	if ((mv.y) && (w3d_raycast(lvl->lvl_data, &ray) > 0.0f))
-		mv.x = 0.0f;
+		(t_v2f){(mv.x > 0.0f) ? 1.0f : -1.0f, 0.0f},
+		RAY_NOLAYER | W3D_BLOC_COLLIDER, mxabsf(mv.x) + 0.4f);
+	if ((mv.x) && (w3d_raycast(lvl->lvl_data, &ray) > 0.0f))
+		mv.x *= (ray.distance > 0.1f) ?
+			(ray.distance - 0.1f) / (mxabsf(mv.x) + 0.3f) : 0.0f;
+		// mv.x = 0.0f;
 	ray = w3d_mkray((t_v2f){pc.position.x + mv.z, pc.position.y},
-		(t_v2f){0.0f, (mv.y >= 0.0f) ? 1.0f : -1.0f},
-		RAY_NOLAYER | W3D_BLOC_COLLIDER, mxabsf(mv.y) + 0.25f);
+		(t_v2f){0.0f, (mv.y > 0.0f) ? 1.0f : -1.0f},
+		RAY_NOLAYER | W3D_BLOC_COLLIDER, mxabsf(mv.y) + 0.4f);
 	if ((mv.y) && (w3d_raycast(lvl->lvl_data, &ray) > 0.0f))
-		mv.y = 0.0f;
+		mv.y *= (ray.distance > 0.1f) ?
+			(ray.distance - 0.1f) / (mxabsf(mv.y) + 0.3f) : 0.0f;
+		// mv.y = 0.0f;
 	mv.z = 0.0f;
 	return (mv);
 }

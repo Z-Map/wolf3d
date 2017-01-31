@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/07 14:37:57 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/31 15:43:29 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/31 17:53:59 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ t_ray			w3d_rayloopy(t_w3dmap *map, t_ray ray)
 	idx.y += dir;
 	while (w3dlvl_in(map, idx))
 	{
-		if ((bloc = w3dlvl_getbox_vi(map, idx)) && !(bloc->layer & lay))
+		if ((bloc = w3dlvl_getbox_vi(map, idx)) && (
+			(ray.flags & (t_ul)bloc->flags) ||
+			(!(ray.flags & RAY_NOLAYER) && !(bloc->layer & lay))))
 		{
 			ray.normale = (t_v3f){0.0f, -(float)dir, 0.0f};
 			dist = mxabsf((float)((dir < 0) ? idx.y + 1 : idx.y) - ray.start.y);
@@ -53,7 +55,9 @@ t_ray			w3d_rayloopx(t_w3dmap *map, t_ray ray)
 	idx.x += dir;
 	while (w3dlvl_in(map, idx))
 	{
-		if ((bloc = w3dlvl_getbox_vi(map, idx)) && !(bloc->layer & lay))
+		if ((bloc = w3dlvl_getbox_vi(map, idx)) && (
+			(ray.flags & (t_ul)bloc->flags) ||
+			(!(ray.flags & RAY_NOLAYER) && !(bloc->layer & lay))))
 		{
 			ray.normale = (t_v3f){-(float)dir, 0.0f, 0.0f};
 			dist = mxabsf((float)((dir < 0) ? idx.x + 1 : idx.x) - ray.start.x);
