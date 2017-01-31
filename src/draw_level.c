@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/23 09:50:38 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/31 15:33:24 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void			draw_col(mglimg *scr, int column, int height, t_ray *ray)
 	float			uva, uvb;
 
 	// ft_printf("base : %u, %i\noffset : %i\n", scr->y, height, offset);
-	if (ray->bloc->tex)
+	if ((ray->bloc) && (ray->bloc->tex))
 		tx = (int)((((ray->end.x  + ray->end.y) * 0.5f)
 		- (float)(int)((ray->end.x + ray->end.y) * 0.5f)) * ray->bloc->tex->x);
 	uva = 1.0 / (height + 1);
@@ -40,14 +40,14 @@ void			draw_col(mglimg *scr, int column, int height, t_ray *ray)
 	{
 		// ft_printf("px : %i, %i\n", column, y);
 		px = column + y * scr->x;
-		if (ray->bloc->tex)
+		if ((ray->bloc) && (ray->bloc->tex))
 		{
 			ty = (int)roundf(uvb * ray->bloc->tex->y) % ray->bloc->tex->y;
 			((unsigned int *)pxs)[px] = ((unsigned int *)(
 				ray->bloc->tex->pixels))[tx + (ty * ray->bloc->tex->x)];
 			uvb += uva;
 		}
-		else
+		else if (ray->bloc)
 		{
 			pxs[px * 4] = ray->bloc->color.r;
 			pxs[px * 4 + 1] = ray->bloc->color.g;
@@ -56,26 +56,6 @@ void			draw_col(mglimg *scr, int column, int height, t_ray *ray)
 		}
 		y++;
 	}
-}
-
-void			w3d_process_mov(t_w3dpc *player)
-{
-	if (player->movkey & W3D_PCK_FW)
-		player->movement.x = player->speed;
-	else if (player->movkey & W3D_PCK_BW)
-		player->movement.x = -player->speed;
-	else
-		player->movement.x = 0.0f;
-	if (player->movkey & W3D_PCK_LE)
-		player->movement.y = player->speed;
-	else if (player->movkey & W3D_PCK_RI)
-		player->movement.y = -player->speed;
-	else
-		player->movement.y = 0.0f;
-	if (player->movkey & W3D_PCK_LLE)
-		player->look.x -= player->speed;
-	else if (player->movkey & W3D_PCK_LRI)
-		player->look.x += player->speed;
 }
 
 int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
@@ -87,7 +67,6 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 	t_v2f		a;
 	float		dist;
 	t_ray		ray;
-	t_v3f		mv;
 	t_v2f		look;
 
 	look = (t_v2f){cosf(lay->level.player.look.x),
@@ -96,11 +75,7 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 	x = w3d->screen->x;
 	angle = -sin(fov / 2.0f);
 	rot = (angle * -2.0) / (double)x;
-	w3d_process_mov(&(lay->level.player));
-	mv = lay->level.player.movement;
-	mv = (t_v3f){mv.x * look.x + mv.y * look.y,
-		- mv.y * look.x + mv.x * look.y, 0.0f};
-	pv3faddv3f(&(lay->level.player.position), &mv);
+	w3d_update_player(&(lay->level));
 	// lay->level.player.movement = (t_v3f){0.0f, 0.0f, 0.0f};
 	ray = (t_ray){.start = v3to2f(lay->level.player.position),
 		.dir = (t_v2f){0.0f, 1.0f}, .end = (t_v2f){0.0f, 0.0f},
@@ -112,6 +87,7 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 		a = normalize2f((t_v2f){(float)cos(fov / 2.0f), (float)angle});
 		ray.dir = (t_v2f){look.x * a.x + a.y * look.y,
 			-look.x * a.y + look.y * a.x};
+		ray.distance = -1.0f;
 		dist = w3d_raycast(lay->level.lvl_data, &ray);
 		dist *= (float)a.x;
 		// dist *= (float)cos(a);

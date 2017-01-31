@@ -6,11 +6,20 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 06:09:27 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/23 06:30:09 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/31 15:32:53 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+int				w3dlvl_in(t_w3dmap *map, t_v2i idx)
+{
+	if ((idx.x < 0) || (idx.y < 0))
+		return (0);
+	else if ((idx.x < (int)map->size.x) && (idx.y < (int)map->size.y))
+		return (1);
+	return (0);
+}
 
 t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y)
 {

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/27 20:36:23 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/31 15:44:17 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,17 @@ struct			s_octree_node
 	void		*br;
 };
 
+# define RAY_NOLAYER	1ul << 33
+
 struct			s_ray
 {
 	t_v2f		start;
 	t_v2f		dir;
+	t_ul		flags;
 	t_v2f		end;
-	t_v2ui		grid_id;
-	t_v3f		normale;
 	float		distance;
+	t_v3f		normale;
+	t_v2ui		grid_id;
 	t_w3dbox	*bloc;
 };
 
@@ -229,7 +232,13 @@ void			w3d_set_evtflags(t_ui *flags, t_w3devt evt, t_ui flag);
 
 void			w3d_layer_draw(t_w3d *w3d);
 float			w3d_rayboxstep(const t_ray *ray, t_v2i *idx);
+t_ray			w3d_mkray(t_v2f start, t_v2f dir, t_ul flags, float dist);
 float			w3d_raycast(t_w3dmap *map, t_ray *ray);
+t_ray			w3d_rayloop(t_w3dmap *map, t_ray ray);
+t_ray			w3d_rayloopx(t_w3dmap *map, t_ray ray);
+t_ray			w3d_rayloopy(t_w3dmap *map, t_ray ray);
+t_ul			w3d_raystart(t_w3dmap *map, t_ray *ray, t_v3f *pos, t_v2i *idx);
+t_ray			w3d_rayend(t_ray ray, t_v2i *idx, t_w3dbox *bloc, float dist);
 
 int				w3d_error_mgr(t_w3d *w3d, int error, const char *message);
 
@@ -238,12 +247,14 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d);
 int				w3d_event_process_lvl(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
 t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
 t_w3dl			w3d_delete_lvl(void);
-void			w3d_process_mov(t_w3dpc *player);
+void			w3d_update_pcmov(t_w3dpc *player);
+void			w3d_update_player(t_w3dlvl *lvl);
 
 t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y);
 t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y);
 t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx);
 t_w3dbox		*w3dlvl_getbox_vui(t_w3dmap *map, t_v2ui idx);
+int				w3dlvl_in(t_w3dmap *map, t_v2i idx);
 
 t_w3dl			w3d_create_gui(t_w3d *w3d);
 int				w3d_draw_gui(t_w3dl *lay, t_w3d *w3d);

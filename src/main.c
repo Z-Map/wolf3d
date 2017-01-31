@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/23 14:29:52 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/31 03:53:23 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 	w3d->screen = (mglimg *)mglw_get2dlayer(w3d->win);
 	(void)ac;
 	(void)av;
-	w3d->render.rays = (t_ray *)malloc(sizeof(t_ray) * 800);
+	w3d->render.rays = (t_ray *)malloc(sizeof(t_ray) * w3d->screen->x);
 	init_testdata(w3d);
 	return (0);
 }
@@ -66,7 +66,7 @@ int				main(int argc, char **argv)
 			// 	1.0 / ((1.0 / 60.0) - timer));
 			nanosleep(&t, NULL);
 		}
-		ft_printf("Sleep : % 6.4F Mx FPS : % 6.4F\e[40D", timer,
+		ft_printf("Sleep : % 6.4F Mx FPS : % 6.4F\e[38D", timer,
 				1.0 / ((1.0 / 60.0) - timer));
 	}
 	mglw_close();

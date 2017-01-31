@@ -6,7 +6,7 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2017/01/23 06:23:36 by qloubier         ###   ########.fr        #
+#    Updated: 2017/01/30 17:12:29 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,10 +42,13 @@ SRCS		= main.c\
 			event_level.c\
 			raycast.c\
 			menu.c\
+			player.c\
 			parser.c\
 			parse_menu.c\
 			parse_level.c\
-			utils_levelbox.c
+			utils_levelbox.c\
+			utils_raycast.c\
+			utils_ray.c
 
 OBJ			= $(subst /,~,$(SRCS:%.c=%.o))
 

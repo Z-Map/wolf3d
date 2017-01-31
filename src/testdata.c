@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:08:22 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/28 12:36:28 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/01/31 17:28:54 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,22 +35,24 @@ static struct			s_testdata
 	},
 	.maps = {
 		(t_w3dmap){
-			.bloclen = 4, .flags = 0,
+			.bloclen = 5, .flags = 0,
 			.position = (t_v2ui){0, 0},
 			.size = (t_v2ui){20, 20},
 			.height = (t_v2f){0.0f, 2.0f},
-			.blocs = (t_w3dbox[4]){
-				(t_w3dbox){ .flags = 0, .userid = 0,
+			.blocs = (t_w3dbox[5]){
+				(t_w3dbox){ .flags = 0, .userid = 0, .layer = 1,
+					.color = (t_rgba){128, 55, 10, 255}, .tex = NULL},
+				(t_w3dbox){ .flags = W3D_BLOC_WALL | W3D_BLOC_COLLIDER,
+					.userid = 1, .layer = 1 << 1,
 					.color = (t_rgba){255, 255, 255, 255}, .tex = NULL},
-				(t_w3dbox){
-					.flags = W3D_BLOC_WALL | W3D_BLOC_COLLIDER,
-					.userid = 1, .color = (t_rgba){255, 255, 255, 255},
-					.tex = NULL},
 				(t_w3dbox){ .flags = W3D_BLOC_WALL | W3D_BLOC_COLLIDER,
-					.userid = 2, .color = (t_rgba){0, 255, 127, 255},
-					.tex = NULL },
+					.userid = 2, .layer = 1 << 2,
+					.color = (t_rgba){0, 255, 127, 255}, .tex = NULL },
+				(t_w3dbox){ .flags = 0, .userid = 3, .layer = 1 | 1 << 2,
+					.color = (t_rgba){128, 55, 10, 255}, .tex = NULL },
 				(t_w3dbox){ .flags = W3D_BLOC_WALL | W3D_BLOC_COLLIDER,
-					.userid = -1, .color = (t_rgba){255, 0, 0, 255},
+					.userid = -1, .layer = 1 << 3,
+					.color = (t_rgba){255, 0, 0, 255},
 					.tex = NULL }
 			},
 			.grid = NULL
@@ -85,26 +87,26 @@ static struct			s_testdata
 		},
 	},
 	.leveldata = {
-		{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 3 },
-		{ 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 3 },
-		{ 3, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3 },
-		{ 3, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3 },
-		{ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 }
+		{ 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 4 },
+		{ 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 4 },
+		{ 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 4 },
+		{ 4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 4 },
+		{ 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 }
 	},
 	.leveldataptr = { NULL, NULL, NULL, NULL, NULL,
 		NULL, NULL, NULL, NULL, NULL}
@@ -135,15 +137,20 @@ static void		init_testdata(t_w3d *w3d)
 	G_TESTDATA.leveldataptr[19] = G_TESTDATA.leveldata[19];
 	G_TESTDATA.testlvl.lvl_data->grid = G_TESTDATA.leveldataptr;
 	G_TESTDATA.layers[0].level = G_TESTDATA.testlvl;
-	G_TESTDATA.textures[0] = mglw_loadimage("walltex.png", 0, 4);
+	G_TESTDATA.textures[0] = mglw_loadimage("data/textures/walltex.png", 0, 4);
 	G_TESTDATA.maps->blocs[1].flags |= W3D_BLOC_TEX;
 	G_TESTDATA.maps->blocs[1].tex = G_TESTDATA.textures[0];
-	G_TESTDATA.textures[1] = mglw_loadimage("greenwalltex.png", 0, 4);
+	G_TESTDATA.textures[1] = mglw_loadimage("data/textures/greenwalltex.png", 0, 4);
 	G_TESTDATA.maps->blocs[2].flags |= W3D_BLOC_TEX;
 	G_TESTDATA.maps->blocs[2].tex = G_TESTDATA.textures[1];
-	G_TESTDATA.textures[2] = mglw_loadimage("limitwall.png", 0, 4);
+	G_TESTDATA.textures[2] = mglw_loadimage("data/textures/limitwall.png", 0, 4);
+	G_TESTDATA.maps->blocs[4].flags |= W3D_BLOC_TEX;
+	G_TESTDATA.maps->blocs[4].tex = G_TESTDATA.textures[2];
+	G_TESTDATA.textures[3] = mglw_loadimage("data/textures/woodfloor.png", 0, 4);
+	G_TESTDATA.maps->blocs[0].flags |= W3D_BLOC_TEX;
+	G_TESTDATA.maps->blocs[0].tex = G_TESTDATA.textures[3];
 	G_TESTDATA.maps->blocs[3].flags |= W3D_BLOC_TEX;
-	G_TESTDATA.maps->blocs[3].tex = G_TESTDATA.textures[2];
+	G_TESTDATA.maps->blocs[3].tex = G_TESTDATA.textures[3];
 	w3d->layers = G_TESTDATA.layers;
 	w3d->active_layers[0] = G_TESTDATA.layers;
 	w3d->laynum = 1;
