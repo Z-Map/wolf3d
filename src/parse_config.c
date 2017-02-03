@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parse_config.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/06 11:14:54 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/03 15:34:43 by qloubier         ###   ########.fr       */
+/*   Created: 2017/02/03 14:45:56 by qloubier          #+#    #+#             */
+/*   Updated: 2017/02/03 16:12:07 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wolf3d.h"
+#include "parser.h"
 
-t_w3dl			w3d_parse(t_w3d *w3d, const char *path)
+int		w3d_parse_cfg(t_w3d *w3d, const char *path, t_w3dmap *map)
 {
-	const size_t	len = ft_strlen(path);
-	t_w3dl			ret;
+	t_pdata	dat;
+	int		fd;
 
-	ret.layer.type = W3D_ERROR;
-	if (!path)
-		return (ret);
-	if ((len > 2) && ft_strequ(".w3dl", path + len - 3))
-		return (w3d_parse_lvl(w3d, path, ret));
-	else if ((len > 2) && ft_strequ(".w3dg", path + len - 3))
-		return (w3d_parse_gui(w3d, path, ret));
-	else
-		return (ret);
+	dat.error = 1;
+	if (ft_strchr(path,))
+		ft_strncpy(w3d->paths.cfg_file, path, w3d->paths.cfg_len);
+	if ((fd = open(path, O_RDONLY)) < 0)
+		return (0);
+
+	close(fd);
+	return (dat.error);
 }

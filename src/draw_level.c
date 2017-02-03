@@ -6,104 +6,130 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/31 15:33:24 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/03 01:16:53 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void			draw_col(mglimg *scr, int column, int height, t_ray *ray)
+static t_ui		get_texpx(t_v2f pos, float height, mglimg *tex)
 {
-	const int		offset = ((int)scr->y - height) / 2;
-	size_t			px;
-	unsigned char	*pxs;
-	unsigned int	y;
-	int				tx, ty;
-	float			uva, uvb;
+	pos = (t_v2f){ mxfracf(0.5f * (pos.x + pos.y)) * (tex->x - 1),
+		roundf(height * (tex->y - 1)) * tex->x};
+	return (((t_ui *)(tex->pixels))[(int)roundf(pos.x) + (int)pos.y]);
+}
 
-	// ft_printf("base : %u, %i\noffset : %i\n", scr->y, height, offset);
-	if ((ray->bloc) && (ray->bloc->tex))
-		tx = (int)((((ray->end.x  + ray->end.y) * 0.5f)
-		- (float)(int)((ray->end.x + ray->end.y) * 0.5f)) * ray->bloc->tex->x);
-	uva = 1.0 / (height + 1);
-	uvb = 0.0;
-	pxs = scr->pixels;
-	y = 0;
-	if (offset > 0)
-		y = (unsigned int)offset;
+float			w3d_drawplane(mglimg *scr, t_w3dlvl *lvl, t_v2i *px, t_v4f l)
+{
+	const float	dimz = cosf(lvl->player.fov.y / 2.0f);
+	float		dist;
+	t_v2f		pos;
+	t_v2i		idx;
+	t_w3dbox	*bloc;
+
+	l.x = mxabsf(l.x) + 0.0001f;
+	dist = ((dimz * 1.16f) / (l.x)) / l.y;
+	pos.x = lvl->player.position.x + (dist * l.z);
+	pos.y = lvl->player.position.y + (dist * l.w);
+	idx = (t_v2i){(int)pos.x, (int)pos.y};
+	if ((l.x < 0.01f) || (!idx.x && (pos.x < 0.0)) || (!idx.y && (pos.y < 0.0))
+		|| !(bloc = w3dlvl_getbox_vi(lvl->lvl_data, idx)))
+		((t_ui *)scr->pixels)[px->x + px->y * scr->x] = 0xff;
+	else if (bloc->tex)
+		((t_ui *)scr->pixels)[px->x + px->y * scr->x] = get_texpx((t_v2f){
+			mxabsf(pos.x) + 1.0f, 0.0f},
+			mxfracf(0.5f * mxabsf(pos.y) + 0.5f), bloc->tex);
 	else
+		((t_ui *)scr->pixels)[px->x + px->y * scr->x] =
+			*((t_ui *)&(bloc->color));
+	return (1.0f);
+}
+
+float			w3d_drawwall(mglimg *scr, t_v2i *px, int height, t_ray *ray)
+{
+	const float	h = (float)height;
+	t_ui		*pxs;
+
+	if (height > px->y)
+		height -= (height - px->y) / 2;
+	if (px->y == (int)scr->y)
+		px->y--;
+	if (ray->normale.x)
+		ray->end = (t_v2f){ray->end.y, ray->end.x};
+	pxs = (t_ui *)scr->pixels;
+	if (!ray->bloc)
+		while (height-- && px->y)
+			pxs[px->x + px->y-- * scr->x] = 0xff;
+	else if ((ray->bloc) && (ray->bloc->tex))
+		while (height-- && px->y)
+			pxs[px->x + px->y-- * scr->x] = get_texpx(ray->end,
+				(float)height / h, ray->bloc->tex);
+	else
+		while (height-- && px->y)
+			pxs[px->x + px->y-- * scr->x] = *((t_ui *)&(ray->bloc->color));
+	if (px->y)
+		px->y++;
+	return (h);
+}
+
+void			w3d_drawcol(t_w3dlvl *lvl, t_w3dthr *ctx, t_ray *ray)
+{
+	t_v2i		px;
+	int			height;
+	int			offset;
+	t_v4f		look;
+	float		step;
+
+	px = (t_v2i){ctx->x, ctx->w3d->screen->y};
+	look = (t_v4f){-sin(lvl->player.fov.y / 2.0f), ctx->xfix, ray->dir.x, ray->dir.y};
+	step = (look.x * -2.0f) / (float)px.y;
+	height = round(((lvl->lvl_data->height.y - lvl->lvl_data->height.x)
+		* (float)(ctx->w3d->screen->y)) / ray->distance);
+	if (height >= px.y)
+		w3d_drawwall(ctx->w3d->screen, &px, height, ray);
+	else
+		offset = (px.y - height) / 2;
+	while (px.y-- > 0)
 	{
-		uvb = -offset * uva;
-		height = (int)scr->y;
-	}
-	while (height--)
-	{
-		// ft_printf("px : %i, %i\n", column, y);
-		px = column + y * scr->x;
-		if ((ray->bloc) && (ray->bloc->tex))
-		{
-			ty = (int)roundf(uvb * ray->bloc->tex->y) % ray->bloc->tex->y;
-			((unsigned int *)pxs)[px] = ((unsigned int *)(
-				ray->bloc->tex->pixels))[tx + (ty * ray->bloc->tex->x)];
-			uvb += uva;
-		}
-		else if (ray->bloc)
-		{
-			pxs[px * 4] = ray->bloc->color.r;
-			pxs[px * 4 + 1] = ray->bloc->color.g;
-			pxs[px * 4 + 2] = ray->bloc->color.b;
-			pxs[px * 4 + 3] = 255;
-		}
-		y++;
+		if (!(offset--))
+			look.x += step * w3d_drawwall(ctx->w3d->screen, &px, height, ray);
+		else
+			look.x += step * w3d_drawplane(ctx->w3d->screen, lvl, &px, look);
 	}
 }
 
 int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 {
-	const float	fov = 1.047197551f;
+	const float	dimz = cos(lay->level.player.fov.x / 2.0f);
+	t_v2f		start;
+	t_v2f		dir;
+	t_v4f		look;
 	int			x;
-	double		angle;
-	double		rot;
-	t_v2f		a;
-	float		dist;
-	t_ray		ray;
-	t_v2f		look;
+	// test var
+	// t_ray		*ray;
+	// t_w3dthr	ctx;
 
-	look = (t_v2f){cosf(lay->level.player.look.x),
-		sinf(lay->level.player.look.x)};
-	(void)lay;
+	w3d_update_player(w3d, &(lay->level));
 	x = w3d->screen->x;
-	angle = -sin(fov / 2.0f);
-	rot = (angle * -2.0) / (double)x;
-	w3d_update_player(&(lay->level));
-	// lay->level.player.movement = (t_v3f){0.0f, 0.0f, 0.0f};
-	ray = (t_ray){.start = v3to2f(lay->level.player.position),
-		.dir = (t_v2f){0.0f, 1.0f}, .end = (t_v2f){0.0f, 0.0f},
-		.grid_id = (t_v2ui){0, 0}, .normale = (t_v3f){0.0f, 0.0f, 0.0f},
-		.distance = 0.0f, .bloc = NULL};
-	ft_bzero(w3d->screen->pixels, w3d->screen->memlen);
+	look = (t_v4f){lay->level.player.rotations.x, lay->level.player.rotations.y,
+		-sin(lay->level.player.fov.x / 2.0f), 0.0f};
+	look.w = (look.z * -2.0f) / (float)x;
+	start = v3to2f(lay->level.player.position);
 	while (x--)
 	{
-		a = normalize2f((t_v2f){(float)cos(fov / 2.0f), (float)angle});
-		ray.dir = (t_v2f){look.x * a.x + a.y * look.y,
-			-look.x * a.y + look.y * a.x};
-		ray.distance = -1.0f;
-		dist = w3d_raycast(lay->level.lvl_data, &ray);
-		dist *= (float)a.x;
-		// dist *= (float)cos(a);
-		// ft_printf("coucou : % 6.4f\e[20D", cosf((float)angle));
-		// ray.end = (t_v2f){ ray.start.x + ray.dir.x * dist,
-		// 	ray.start.y + ray.dir.y * dist};
-		if (dist > 0.0f)
-			draw_col(w3d->screen, x,
-				round(((2.0 * w3d->screen->y) / dist)), &ray);
-		// else if (dist > 0.0f)
-		// 	draw_col(w3d->screen, x, w3d->screen->y,
-		// 		lay->level.lvl_data->blocs[lay->level.lvl_data->grid[
-		// 			ray.grid_id.y][ray.grid_id.x]].color);
-		// else
-		// 	draw_col(w3d->screen, x, 5, (t_rgba){255,0,0,255});
-		angle += rot;
+		dir = normalize2f((t_v2f){dimz, look.z});
+		w3d->render.rays[x] = w3d_mkray(start,
+			(t_v2f){look.x * dir.x + dir.y * look.y,
+				-look.x * dir.y + look.y * dir.x}, 0, dir.x);
+		look.z += look.w;
+		// Test part
+		// ctx = (t_w3dthr){ .x = x, .xfix = dir.x, .w3d = w3d, .lay = lay};
+		// ray = &(w3d->render.rays[x]);
+		// ray->distance = -1.0f;
+		// w3d_raycast(lay->level.lvl_data, ray);
+		// ray->distance *= dir.x;
+		// w3d_drawcol(&(lay->level), &ctx, ray);
 	}
+	w3d_start_renderthreads(lay, w3d);
 	return (0);
 }

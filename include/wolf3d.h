@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/31 15:44:17 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/03 16:03:34 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_ray				t_ray;
 
 typedef struct s_wolf3d_main		t_w3d;
 typedef struct s_wolf3d_lvlrender	t_w3drdr;
+typedef struct s_wolf3d_threadrdr	t_w3dthr;
 typedef struct s_wolf3d_event		t_w3devt;
 typedef struct s_wolf3d_player		t_w3dpc;
 typedef struct s_wolf3d_box			t_w3dbox;
@@ -88,6 +89,8 @@ struct			s_wolf3d_player
 	t_v3f		movement;
 	t_v3f		eyes;
 	t_v2f		look;
+	t_v4f		rotations;
+	t_v2f		fov;
 };
 
 # define W3D_BLOC_WALL		0x1
@@ -206,13 +209,54 @@ struct			s_wolf3d_lvlrender
 {
 	int			flags;
 	int			xlen;
+	t_v2f		ratio;
 	t_ray		*rays;
+	t_v2f		*wdist;
+	float		*wfix;
+	float		*hdist;
 };
+
+# define W3D_THREADNUM 8
+
+struct			s_wolf3d_threadrdr
+{
+	int			x;
+	float		xfix;
+	t_w3d		*w3d;
+	t_w3dl		*lay;
+};
+
+typedef struct	s_cbuffer
+{
+	size_t		len;
+	char		*b;
+}				t_str;
+
+# define CPL 256
+
+typedef struct	s_cfg
+{
+	size_t		data_len;
+	char		*data_dir;
+	char		*data_file;
+	size_t		cfg_len;
+	char		*cfg_dir;
+	char		*cfg_file;
+	size_t		lvl_len;
+	char		*lvl_dir;
+	char		*lvl_file;
+	size_t		gui_len;
+	char		*gui_dir;
+	char		*gui_file;
+	size_t		tex_len;
+	char		*tex_dir;
+	char		*tex_file;
+}				t_cfg;
 
 struct			s_wolf3d_main
 {
 	int			flags;
-	int			padding;
+	int			strid;
 	mglwin		*win;
 	mglimg		*screen;
 	t_w3drdr	render;
@@ -220,6 +264,10 @@ struct			s_wolf3d_main
 	int			active_laynum;
 	t_w3dl		*layers;
 	t_w3dl		*active_layers[32];
+	t_str		strbuf[128];
+	char		*cbuffer;
+	t_cfg		paths;
+	t_w3dmap	default_cfg;
 };
 
 t_w3dl			w3d_parse(t_w3d *w3d, const char *path);
@@ -244,11 +292,16 @@ int				w3d_error_mgr(t_w3d *w3d, int error, const char *message);
 
 t_w3dl			w3d_create_lvl(t_w3d *w3d);
 int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d);
+void			w3d_drawcol(t_w3dlvl *lvl, t_w3dthr *ctx, t_ray *ray);
+float			w3d_drawwall(mglimg *scr, t_v2i *px, int height, t_ray *ray);
+float			w3d_drawplane(mglimg *scr, t_w3dlvl *lvl, t_v2i *px, t_v4f l);
+int				w3d_start_renderthreads(t_w3dl *lay, t_w3d *w3d);
 int				w3d_event_process_lvl(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
 t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
+int				w3d_parse_cfg(t_w3d *w3d, const char *path, t_w3dmap *map);
 t_w3dl			w3d_delete_lvl(void);
 void			w3d_update_pcmov(t_w3dpc *player);
-void			w3d_update_player(t_w3dlvl *lvl);
+void			w3d_update_player(t_w3d *w3d, t_w3dlvl *lvl);
 
 t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y);
 t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y);

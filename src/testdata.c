@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:08:22 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/31 17:28:54 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/03 01:02:01 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@ static struct			s_testdata
 		.size = (t_v2ui){20, 20}, .height = (t_v2f){0.0f, 2.0f},
 		.level_num = 1, .padding = 0,
 		.player = (t_w3dpc){ .movkey = 0, .flags = 0,
-			.position = (t_v3f){ 10.5f, 10.5f, 0.5f}, .speed = 0.05f,
+			.position = (t_v3f){ 10.5f, 10.5f, 0.5f}, .speed = 3.0f,
 			.movement = (t_v3f){ 0.0f, 0.0f, 0.0f},
-			.eyes = (t_v3f){ 0.0f, 0.0f, 0.0f}, .look = (t_v2f){0.0f, 0.0f}},
+			.eyes = (t_v3f){ 0.0f, 0.0f, 0.0f}, .look = (t_v2f){0.0f, 0.0f},
+			.fov = (t_v2f){1.047197551f, 1.047197551f}},
 		.lvl_data = NULL, .octree = NULL
 	},
 	.maps = {
@@ -49,7 +50,7 @@ static struct			s_testdata
 					.userid = 2, .layer = 1 << 2,
 					.color = (t_rgba){0, 255, 127, 255}, .tex = NULL },
 				(t_w3dbox){ .flags = 0, .userid = 3, .layer = 1 | 1 << 2,
-					.color = (t_rgba){128, 55, 10, 255}, .tex = NULL },
+					.color = (t_rgba){40, 162, 96, 255}, .tex = NULL },
 				(t_w3dbox){ .flags = W3D_BLOC_WALL | W3D_BLOC_COLLIDER,
 					.userid = -1, .layer = 1 << 3,
 					.color = (t_rgba){255, 0, 0, 255},
@@ -95,17 +96,17 @@ static struct			s_testdata
 		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 4 },
 		{ 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 4 },
 		{ 4, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
-		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
-		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
-		{ 4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 4 },
-		{ 4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 4 },
-		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 4 },
+		{ 4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 4 },
+		{ 4, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 4 },
+		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 3, 0, 0, 4 },
 		{ 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 4 },
 		{ 4, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
 		{ 4, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
 		{ 4, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 4 },
 		{ 4, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 4 },
-		{ 4, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 4 },
+		{ 4, 3, 3, 0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 4 },
 		{ 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 }
 	},
 	.leveldataptr = { NULL, NULL, NULL, NULL, NULL,
@@ -149,8 +150,8 @@ static void		init_testdata(t_w3d *w3d)
 	G_TESTDATA.textures[3] = mglw_loadimage("data/textures/woodfloor.png", 0, 4);
 	G_TESTDATA.maps->blocs[0].flags |= W3D_BLOC_TEX;
 	G_TESTDATA.maps->blocs[0].tex = G_TESTDATA.textures[3];
-	G_TESTDATA.maps->blocs[3].flags |= W3D_BLOC_TEX;
-	G_TESTDATA.maps->blocs[3].tex = G_TESTDATA.textures[3];
+	// G_TESTDATA.maps->blocs[3].flags |= W3D_BLOC_TEX;
+	// G_TESTDATA.maps->blocs[3].tex = G_TESTDATA.textures[3];
 	w3d->layers = G_TESTDATA.layers;
 	w3d->active_layers[0] = G_TESTDATA.layers;
 	w3d->laynum = 1;

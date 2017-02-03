@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/07 14:37:57 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/31 17:53:59 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/03 00:04:11 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,15 +117,6 @@ t_ray			w3d_rayloop(t_w3dmap *map, t_ray ray)
 	return (w3d_rayend(ray, NULL, NULL, -1.0f));
 }
 
-// static int		inrange(t_w3dmap *map, t_v2i idx)
-// {
-// 	if ((idx.x < 0) || (idx.y < 0))
-// 		return (0);
-// 	else if ((idx.x < (int)map->size.x) || (idx.y < (int)map->size.y))
-// 		return (1);
-// 	return (0);
-// }
-
 float			w3d_raycast(t_w3dmap *map, t_ray *ray)
 {
 	t_ray		tr;
@@ -140,30 +131,3 @@ float			w3d_raycast(t_w3dmap *map, t_ray *ray)
 		*ray = tr;
 	return (tr.distance);
 }
-// float			w3d_raycast(t_w3dmap *map, t_ray *ray)
-// {
-// 	t_v2ui		idx;
-// 	t_v2i		nidx;
-// 	t_w3dbox	*box;
-//
-// 	nidx = (t_v2i){(int)(ray->start.x), (int)(ray->start.y)};
-// 	idx = (t_v2ui){(unsigned int)nidx.x, (unsigned int)nidx.y};
-// 	ray->distance = w3d_rayboxstep(ray, &nidx);
-// 	box = w3dlvl_getbox_vui(map, idx);
-// 	while (inrange(map, nidx) && box && !(box->flags & W3D_BLOC_WALL))
-// 	{
-// 		idx = (t_v2ui){(unsigned int)nidx.x, (unsigned int)nidx.y};
-// 		box = w3dlvl_getbox_vui(map, idx);
-// 		if ((!box) || (box->flags & W3D_BLOC_WALL))
-// 			break ;
-// 		ray->distance = w3d_rayboxstep(ray, &nidx);
-// 	}
-// 	ray->grid_id = idx;
-// 	if (!box || !(box->flags & W3D_BLOC_WALL))
-// 		ray->distance = -1.0f;
-// 	else
-// 		ray->end = (t_v2f){ray->start.x + (ray->distance * ray->dir.x),
-// 			ray->start.y + (ray->distance * ray->dir.y)};
-// 	ray->bloc = box;
-// 	return (ray->distance);
-// }
