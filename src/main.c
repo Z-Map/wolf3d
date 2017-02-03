@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/03 16:05:49 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/03 17:06:16 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,29 +39,34 @@ static int		init_data(t_w3d *w3d)
 	w3d->paths.data_dir = malloc(CPL * 5);
 	if (!w3d->cbuffer || !w3d->paths.data_dir)
 		return (0);
-	ft_strcnpy(w3d->paths.data_dir, "data/", CPL * 5);
+	ft_strncpy(w3d->paths.data_dir, "data/", CPL * 5);
 	w3d->paths.data_len = CPL - 6;
 	w3d->paths.cfg_dir = ft_strcpy(w3d->paths.data_dir + CPL, "data/layouts/");
+	w3d->paths.cfg_file = w3d->paths.cfg_dir + 13;
 	w3d->paths.cfg_len = CPL - 14;
 	w3d->paths.lvl_dir = ft_strcpy(w3d->paths.cfg_dir + CPL, "data/textures/");
+	w3d->paths.lvl_file = w3d->paths.lvl_dir + 14;
 	w3d->paths.cfg_len = CPL - 15;
 	w3d->paths.gui_dir = ft_strcpy(w3d->paths.lvl_dir + CPL, "data/gui/");
+	w3d->paths.gui_file = w3d->paths.gui_dir + 9;
 	w3d->paths.cfg_len = CPL - 10;
 	w3d->paths.tex_dir = ft_strcpy(w3d->paths.gui_dir + CPL, "data/levels/");
+	w3d->paths.tex_file = w3d->paths.tex_dir + 12;
 	w3d->paths.cfg_len = CPL - 13;
-	return (w3d_parse_cfg(w3d, "data/layouts/default.w3dc", &w3d->default_cfg));
+	w3d->default_cfg.bloclen = 0;
+	// return (w3d_parse_cfg(w3d, "data/layouts/default.w3dc", &w3d->default_cfg));
+	return (1);
 }
 
 static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 {
-	if (!init_data(w3d))
-		return (0);
-	if ((!mglw_init()) ||
-		(!(w3d->win = mglw_openwin(
+	if (!init_data(w3d) || !mglw_init())
+		return (-121);
+	if ((!(w3d->win = mglw_openwin(
 			mglw_mkwin(MGLW_LEGACY_MODE,
 				MGLW_2DLAYER), //| MGLW_FULLSCREEN | MGLW_FULLRES),
 			800, 600, "~*( Wolf3D )*~"))))
-		return (-1);
+		return (-120);
 	mglw_setsetting(MGLWS_EXITKEY, MGLW_KEY_ESCAPE);
 	mglw_setkcb(w3d->win, 1, &w3d_keypress, w3d);
 	mglw_setkcb(w3d->win, 2, &w3d_keyrepeate, w3d);
@@ -88,9 +93,10 @@ int				main(int argc, char **argv)
 	struct timespec		t = (struct timespec){0, 12000000L};
 	clock_t				ti;
 	double				timer;
+	int					error;
 
-	if (init_wolf3d(&w3d, argc, argv))
-		return (-1);
+	if (error = init_wolf3d(&w3d, argc, argv))
+		return (w3d_nicequit(&w3d, error));
 	ti = clock();
 	while (mglwin_run(w3d.win))
 	{
