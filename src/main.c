@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/03 17:06:16 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/04 14:57:10 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static void		resize_callback(void *arg, int w, int h)
 
 	w3d = (t_w3d *)arg;
 	w3d->screen = (mglimg *)mglw_get2dlayer(w3d->win);
-	w3d->render.rays = (t_ray *)malloc(sizeof(t_ray) * w);
-	w3d->render.ratio.x = (float)h / (float)w;
-	w3d->render.ratio.y = (float)w / (float)h;
+	if (w3d_free_rdrdata(w3d) || !w3d_init_rdrdata(w3d))
+		mglwin_shouldclose(w3d->win);
+	w3d_update_rdrdata(w3d->render, w, h);
 }
 
 static int		init_data(t_w3d *w3d)
@@ -75,16 +75,11 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 	w3d->screen = (mglimg *)mglw_get2dlayer(w3d->win);
 	(void)ac;
 	(void)av;
-	w3d->render.ratio.x = (float)w3d->screen->y / (float)w3d->screen->x;
-	w3d->render.ratio.y = (float)w3d->screen->x / (float)w3d->screen->y;
-	w3d->render.rays = (t_ray *)malloc(sizeof(t_ray) * w3d->screen->x);
+	if (!w3d_init_rdrdata(w3d))
+		return (-119);
+	w3d_update_rdrdata(w3d->render, w3d->screen->x, w3d->screen->y);
 	init_testdata(w3d);
 	return (0);
-}
-
-static void		quit_wolf3d(t_w3d *w3d)
-{
-	free(w3d->render.rays);
 }
 
 int				main(int argc, char **argv)
@@ -93,16 +88,19 @@ int				main(int argc, char **argv)
 	struct timespec		t = (struct timespec){0, 12000000L};
 	clock_t				ti;
 	double				timer;
-	int					error;
+	double				avg;
+	int					error, i;
 
-	if (error = init_wolf3d(&w3d, argc, argv))
+	if ((error = init_wolf3d(&w3d, argc, argv)))
 		return (w3d_nicequit(&w3d, error));
 	ti = clock();
+	i = 0;
 	while (mglwin_run(w3d.win))
 	{
 		w3d_layer_draw(&w3d);
 		ti = clock() - ti;
 		timer = (double)ti / CLOCKS_PER_SEC;
+		avg += timer;
 		timer = (1.0 / 60.0) - timer;
 		ti = clock();
 		if (timer > 0.0)
@@ -112,10 +110,15 @@ int				main(int argc, char **argv)
 			// 	1.0 / ((1.0 / 60.0) - timer));
 			nanosleep(&t, NULL);
 		}
-		// ft_printf("Sleep : % 6.4F Mx FPS : % 6.4F\e[38D", timer,
-		// 		1.0 / ((1.0 / 60.0) - timer));
+		if (i++ >= 60)
+		{
+			avg /= 60.0;
+			ft_printf("Mx FPS :%7.2F Average FPS :%7.2F\e[36D",
+				1.0 / ((1.0 / 60.0) - timer), 1.0 / avg);
+			avg = 0.0;
+			i = 0;
+		}
+		// ft_printf("Mx FPS :% 4.2F\e[15D", 1.0 / ((1.0 / 60.0) - timer));
 	}
-	mglw_close();
-	quit_wolf3d(&w3d);
-	return (0);
+	return (w3d_nicequit(&w3d, 0));
 }

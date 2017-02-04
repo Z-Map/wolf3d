@@ -6,7 +6,7 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2017/02/01 01:18:41 by qloubier         ###   ########.fr        #
+#    Updated: 2017/02/04 13:58:24 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,14 +39,17 @@ SRCS		= main.c\
 			draw.c\
 			draw_level.c\
 			draw_thread.c\
+			render_data.c\
 			events.c\
 			event_level.c\
 			raycast.c\
 			menu.c\
+			error.c\
 			player.c\
 			parser.c\
 			parse_menu.c\
 			parse_level.c\
+			parse_config.c\
 			utils_levelbox.c\
 			utils_raycast.c\
 			utils_ray.c

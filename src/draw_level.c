@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/03 01:16:53 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/04 14:23:29 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static t_ui		get_texpx(t_v2f pos, float height, mglimg *tex)
 {
-	pos = (t_v2f){ mxfracf(0.5f * (pos.x + pos.y)) * (tex->x - 1),
+	pos = (t_v2f){mxfracf(0.5f * (pos.x + pos.y)) * (tex->x - 1),
 		roundf(height * (tex->y - 1)) * tex->x};
 	return (((t_ui *)(tex->pixels))[(int)roundf(pos.x) + (int)pos.y]);
 }

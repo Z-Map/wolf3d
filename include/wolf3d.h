@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/03 16:03:34 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/04 14:16:08 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,9 +210,9 @@ struct			s_wolf3d_lvlrender
 	int			flags;
 	int			xlen;
 	t_v2f		ratio;
+	t_v2f		fov;
 	t_ray		*rays;
 	t_v2f		*wdist;
-	float		*wfix;
 	float		*hdist;
 };
 
@@ -288,7 +288,12 @@ t_ray			w3d_rayloopy(t_w3dmap *map, t_ray ray);
 t_ul			w3d_raystart(t_w3dmap *map, t_ray *ray, t_v3f *pos, t_v2i *idx);
 t_ray			w3d_rayend(t_ray ray, t_v2i *idx, t_w3dbox *bloc, float dist);
 
+int				w3d_init_rdrdata(t_w3d *w3d);
+void			w3d_update_rdrdata(t_w3drdr rdr, int w, int h);
+int				w3d_free_rdrdata(t_w3d *w3d);
+
 int				w3d_error_mgr(t_w3d *w3d, int error, const char *message);
+int				w3d_nicequit(t_w3d *w3d, int ret);
 
 t_w3dl			w3d_create_lvl(t_w3d *w3d);
 int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d);
