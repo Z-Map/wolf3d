@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 13:20:51 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/01 21:58:52 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/04 15:06:53 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,8 @@ static void			*render_thread(void *arg)
 	{
 		ctx->x = x;
 		ray = &(ctx->w3d->render.rays[x]);
-		dist = ray->distance;
+		dist = ctx->w3d->render.wdist[x].x;
 		ctx->xfix = dist;
-		ray->distance = -1.0f;
 		dist *= w3d_raycast(ctx->lay->level.lvl_data, ray);
 		ray->distance = dist;
 		// if (dist > 0.0f)

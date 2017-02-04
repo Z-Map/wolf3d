@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:08:22 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/04 14:07:23 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/04 16:16:25 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,25 @@ static struct			s_testdata
 			.height = (t_v2f){0.0f, 2.0f},
 			.blocs = (t_w3dbox[5]){
 				(t_w3dbox){ .flags = 0, .userid = 0, .layer = 1,
-					.color = (t_rgba){128, 55, 10, 255}, .tex = NULL},
+					.color = (t_rgba){202, 118, 58, 255},
+					.ctex = NULL, .gtex = NULL, .wtex = NULL},
 				(t_w3dbox){ .flags = W3D_BLOC_WALL | W3D_BLOC_COLLIDER,
 					.userid = 1, .layer = 1 << 1,
-					.color = (t_rgba){255, 255, 255, 255}, .tex = NULL},
+					.color = (t_rgba){64, 64, 74, 255},
+					.ctex = NULL, .gtex = NULL, .wtex = NULL},
 				(t_w3dbox){ .flags = W3D_BLOC_WALL | W3D_BLOC_COLLIDER,
 					.userid = 2, .layer = 1 << 2,
-					.color = (t_rgba){0, 255, 127, 255}, .tex = NULL },
-				(t_w3dbox){ .flags = 0, .userid = 3, .layer = 1 | 1 << 2,
-					.color = (t_rgba){40, 162, 96, 255}, .tex = NULL },
+					.color = (t_rgba){32, 46, 19, 255},
+					.ctex = NULL, .gtex = NULL, .wtex = NULL},
+				(t_w3dbox){ .flags = 0, .userid = 3,
+					.layer = 1 << 2,
+					.color = (t_rgba){40, 162, 96, 128},
+					.ctex = NULL, .gtex = NULL, .wtex = NULL},
 				(t_w3dbox){ .flags = W3D_BLOC_WALL | W3D_BLOC_COLLIDER,
 					.userid = -1, .layer = 1 << 3,
-					.color = (t_rgba){255, 0, 0, 255},
-					.tex = NULL }
-			},
-			.grid = NULL
+					.color = (t_rgba){176, 42, 0, 255},
+					.ctex = NULL, .gtex = NULL, .wtex = NULL}
+			}, .grid = NULL
 		},
 		(t_w3dmap){
 			.bloclen = 0, .flags = 0,
@@ -140,16 +144,16 @@ static void		init_testdata(t_w3d *w3d)
 	G_TESTDATA.layers[0].level = G_TESTDATA.testlvl;
 	G_TESTDATA.textures[0] = mglw_loadimage("data/textures/walltex.png", 0, 4);
 	G_TESTDATA.maps->blocs[1].flags |= W3D_BLOC_TEX;
-	G_TESTDATA.maps->blocs[1].tex = G_TESTDATA.textures[0];
+	G_TESTDATA.maps->blocs[1].wtex = G_TESTDATA.textures[0];
 	G_TESTDATA.textures[1] = mglw_loadimage("data/textures/greenwalltex.png", 0, 4);
 	G_TESTDATA.maps->blocs[2].flags |= W3D_BLOC_TEX;
-	G_TESTDATA.maps->blocs[2].tex = G_TESTDATA.textures[1];
+	G_TESTDATA.maps->blocs[2].wtex = G_TESTDATA.textures[1];
 	G_TESTDATA.textures[2] = mglw_loadimage("data/textures/limitwall.png", 0, 4);
 	G_TESTDATA.maps->blocs[4].flags |= W3D_BLOC_TEX;
-	G_TESTDATA.maps->blocs[4].tex = G_TESTDATA.textures[2];
+	G_TESTDATA.maps->blocs[4].wtex = G_TESTDATA.textures[2];
 	G_TESTDATA.textures[3] = mglw_loadimage("data/textures/woodfloor.png", 0, 4);
 	G_TESTDATA.maps->blocs[0].flags |= W3D_BLOC_TEX;
-	G_TESTDATA.maps->blocs[0].tex = G_TESTDATA.textures[3];
+	G_TESTDATA.maps->blocs[0].gtex = G_TESTDATA.textures[3];
 	// G_TESTDATA.maps->blocs[3].flags |= W3D_BLOC_TEX;
 	// G_TESTDATA.maps->blocs[3].tex = G_TESTDATA.textures[3];
 	w3d->layers = G_TESTDATA.layers;
