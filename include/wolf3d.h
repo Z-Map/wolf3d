@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/04 15:41:06 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/15 15:05:10 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ typedef struct s_wolf3d_event		t_w3devt;
 typedef struct s_wolf3d_player		t_w3dpc;
 typedef struct s_wolf3d_box			t_w3dbox;
 typedef struct s_wolf3d_map			t_w3dmap;
+typedef struct s_wolf3d_mapbloc		t_w3dmb;
+typedef struct s_texture			t_w3dtex;
 
 typedef union u_wolf3d_layers		t_w3dl;
 typedef struct s_wolf3d_layer		t_w3dlay;
@@ -105,9 +107,18 @@ struct			s_wolf3d_box
 	t_ul		layer;
 	t_rgba		color;
 	mglimg		*gtex;
-	mglimg		*ctex;
+	mglimg		*rtex;
 	mglimg		*wtex;
 };
+
+struct			s_wolf3d_mapbloc
+{
+	int			id;
+	t_ui		flags;
+	void		*sub_data;
+};
+
+# define W3D_MAP_STATIC		0x1
 
 struct			s_wolf3d_map
 {
@@ -117,7 +128,7 @@ struct			s_wolf3d_map
 	t_v2ui		size;
 	t_v2f		height;
 	t_w3dbox	*blocs;
-	int			**grid;
+	t_w3dmb		**grid;
 };
 
 # define W3D_LAYERTYPENUM 6
@@ -151,7 +162,7 @@ struct			s_wolf3d_basic_lvl
 	t_v2ui		size;
 	t_v2f		height;
 	int			level_num;
-	int			padding;
+	int			active_lvl;
 	t_w3dpc		player;
 	t_w3dmap	*lvl_data;
 	int			***octree;
@@ -234,6 +245,15 @@ typedef struct	s_cbuffer
 	char		*b;
 }				t_str;
 
+struct	s_texture
+{
+	t_w3dtex	*next;
+	int			flags;
+	int			uses;
+	char		*path;
+	mglimg		*img;
+};
+
 # define CPL 256
 
 typedef struct	s_cfg
@@ -257,6 +277,7 @@ typedef struct	s_cfg
 
 struct			s_wolf3d_main
 {
+	t_w3dtex	*textures;
 	int			flags;
 	int			strid;
 	mglwin		*win;
@@ -315,6 +336,10 @@ t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y);
 t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx);
 t_w3dbox		*w3dlvl_getbox_vui(t_w3dmap *map, t_v2ui idx);
 int				w3dlvl_in(t_w3dmap *map, t_v2i idx);
+
+int				w3d_rmlayout(t_w3d *w3d, t_w3dmap *map);
+mglimg			*w3d_loadtex(t_w3d *w3d, const char *path);
+int				w3d_unloadtex(t_w3d *w3d, mglimg *img);
 
 t_w3dl			w3d_create_gui(t_w3d *w3d);
 int				w3d_draw_gui(t_w3dl *lay, t_w3d *w3d);

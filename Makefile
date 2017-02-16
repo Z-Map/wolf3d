@@ -6,14 +6,14 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2017/02/04 13:58:24 by qloubier         ###   ########.fr        #
+#    Updated: 2017/02/15 00:36:49 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 OPSYS		= $(shell uname -s)
 NAME		= wolf3d
 PROJECTNAME	= wolf3d
-LIBS		= libft/libft.a mathex/libmathex.a mglw/libmglw.a
+LIBS		= ../libft/libft.a mathex/libmathex.a mglw/libmglw.a
 LIBFLAGS	= -lm
 INCDIR		= -Iinclude
 CFLAGS		= -Wall -Wextra -Werror
@@ -44,12 +44,16 @@ SRCS		= main.c\
 			event_level.c\
 			raycast.c\
 			menu.c\
+			config.c\
+			textures.c\
 			error.c\
 			player.c\
 			parser.c\
 			parse_menu.c\
+			parse_bloc.c\
 			parse_level.c\
 			parse_config.c\
+			parse_color.c\
 			utils_levelbox.c\
 			utils_raycast.c\
 			utils_ray.c

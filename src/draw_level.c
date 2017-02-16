@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/04 15:55:43 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/09 14:10:39 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ float			w3d_drawplane(t_w3d *w3d, t_w3dlvl *lvl, t_v2i *px, t_v2f l)
 	if ((!idx.x && (pos.x < 0.0)) || (!idx.y && (pos.y < 0.0))
 		|| !(bloc = w3dlvl_getbox_vi(lvl->lvl_data, idx)))
 		((t_ui *)w3d->screen->pixels)[i] = 0xff;
-	else if ((dist < 0.0) && bloc->gtex)
+	else if (((dist < 0.0) && bloc->gtex) || ((dist >= 0.0) && bloc->rtex))
 		((t_ui *)w3d->screen->pixels)[i] = get_texpx(
 				(t_v2f){mxabsf(pos.x) + 1.0f, 0.0f}, mxfracf(0.5f *
-				mxabsf(pos.y) + 0.5f), bloc->gtex);
+				mxabsf(pos.y) + 0.5f), (dist < 0.0) ? bloc->gtex : bloc->rtex);
 	else
 		((t_ui *)w3d->screen->pixels)[i] =
 			*((t_ui *)&(bloc->color));

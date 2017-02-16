@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/04 14:57:10 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/15 15:10:28 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "wolf3d.h"
+#include "parser.h"
 
-#include "testdata.c"
+// #include "testdata.c"
 
 static void		resize_callback(void *arg, int w, int h)
 {
@@ -44,22 +45,31 @@ static int		init_data(t_w3d *w3d)
 	w3d->paths.cfg_dir = ft_strcpy(w3d->paths.data_dir + CPL, "data/layouts/");
 	w3d->paths.cfg_file = w3d->paths.cfg_dir + 13;
 	w3d->paths.cfg_len = CPL - 14;
-	w3d->paths.lvl_dir = ft_strcpy(w3d->paths.cfg_dir + CPL, "data/textures/");
-	w3d->paths.lvl_file = w3d->paths.lvl_dir + 14;
-	w3d->paths.cfg_len = CPL - 15;
+	w3d->paths.lvl_dir = ft_strcpy(w3d->paths.cfg_dir + CPL, "data/levels/");
+	w3d->paths.lvl_file = w3d->paths.lvl_dir + 12;
+	w3d->paths.lvl_len = CPL - 13;
 	w3d->paths.gui_dir = ft_strcpy(w3d->paths.lvl_dir + CPL, "data/gui/");
 	w3d->paths.gui_file = w3d->paths.gui_dir + 9;
-	w3d->paths.cfg_len = CPL - 10;
-	w3d->paths.tex_dir = ft_strcpy(w3d->paths.gui_dir + CPL, "data/levels/");
-	w3d->paths.tex_file = w3d->paths.tex_dir + 12;
-	w3d->paths.cfg_len = CPL - 13;
+	w3d->paths.gui_len = CPL - 10;
+	w3d->paths.tex_dir = ft_strcpy(w3d->paths.gui_dir + CPL, "data/textures/");
+	w3d->paths.tex_file = w3d->paths.tex_dir + 14;
+	w3d->paths.tex_len = CPL - 15;
 	w3d->default_cfg.bloclen = 0;
-	// return (w3d_parse_cfg(w3d, "data/layouts/default.w3dc", &w3d->default_cfg));
-	return (1);
+	return (w3d_parse_cfg(w3d, "data/layouts/default.w3dc", &w3d->default_cfg));
+	// return (1);
+}
+
+static int		init_wolf3d_lvls(t_w3d *w3d, int ac, char **av)
+{
+	t_w3dl		lay;
+
+
 }
 
 static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 {
+	w3d->textures = NULL;
+	w3dp_bloc_tex(NULL, NULL, w3d);
 	if (!init_data(w3d) || !mglw_init())
 		return (-121);
 	if ((!(w3d->win = mglw_openwin(
@@ -73,12 +83,12 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 	mglw_setkcb(w3d->win, 0, &w3d_keyrelease, w3d);
 	mglw_setsizecb(w3d->win, &resize_callback, w3d);
 	w3d->screen = (mglimg *)mglw_get2dlayer(w3d->win);
-	(void)ac;
-	(void)av;
 	if (!w3d_init_rdrdata(w3d))
 		return (-119);
 	w3d_update_rdrdata(w3d->render, w3d->screen->x, w3d->screen->y);
-	init_testdata(w3d);
+	// init_testdata(w3d);
+	if (!init_wolf3d_lvls(w3d, ac, av))
+		return (-104);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 17:43:05 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/04 15:53:32 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/15 13:09:15 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int				w3d_init_rdrdata(t_w3d *w3d)
 	w3d->render.hdist = (float *)malloc(sizeof(float) * w3d->screen->y);
 	w3d->render.ratio.x = (float)w3d->screen->y / (float)w3d->screen->x;
 	w3d->render.ratio.y = (float)w3d->screen->x / (float)w3d->screen->y;
-	w3d->render.fov = (t_v2f){1.047197551f * w3d->render.ratio.y, 1.047197551f};
+	w3d->render.fov = (t_v2f){0.8f * w3d->render.ratio.y, 1.047197551f};
 	if (!w3d->render.rays || !w3d->render.wdist || !w3d->render.hdist)
 		return (0);
 	return(1);

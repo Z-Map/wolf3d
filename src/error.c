@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 16:39:15 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/04 13:56:53 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/15 02:22:50 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static char	*free_basedata(t_w3d *w3d)
 	free(w3d->paths.data_dir);
 	if (!w3d->default_cfg.bloclen)
 		return ("Failed to load default level layout");
+	w3d_rmlayout(w3d, &(w3d->default_cfg));
 	if (mglw_geterror())
 		return ("Mmglw failed to init");
 	return ("Uknown error");
@@ -49,7 +50,7 @@ static void	free_init_data(t_w3d *w3d, const char **msg)
 {
 	if (w3d_free_rdrdata(w3d))
 		*msg = "Error int render data";
-
+	
 }
 
 int			w3d_nicequit(t_w3d *w3d, int ret)
