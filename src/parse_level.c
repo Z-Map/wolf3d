@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 15:50:44 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 21:43:36 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/17 18:22:47 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ static int		parse_init(t_w3d *w3d, t_pdata *dat, t_w3dmap *map)
 	dat->buf[ret] = '\0';
 	dat->buf[PBUFS] = '\0';
 	dat->buf[PBUFS + 1] = (ret < PBUFS) ? 0 : 1;
-	dat->blist[0] = ft_blstnew(sizeof(t_w3dmap), 32);
+	dat->blist[0] = ft_blstnew(sizeof(t_w3dmap), 8);
+	dat->blist[1] = ft_blstnew(sizeof(t_w3dmb), 32);
+	dat->blist[2] = ft_blstnew(sizeof(size_t), 32);
 	dat->data[0] = map;
 	*map = w3d->default_cfg;
 	map->height = (t_v2f){0.0f, 2.0f};
