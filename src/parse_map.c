@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 22:43:06 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 14:23:24 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 16:16:10 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ static int		add_value(int id, int num, t_pdata *dat)
 
 int				w3dp_newmap(t_pdata *dat)
 {
+	if (!w3dp_rendermap(dat))
+		return (0);
 	dat->blist[1] = ft_blstnew(sizeof(t_w3dmb), 64);
 	dat->blist[2] = ft_blstnew(sizeof(size_t), 32);
-
+	
 	return (1);
 }
 

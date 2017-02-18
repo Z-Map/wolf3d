@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 14:19:04 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 14:58:22 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 15:10:52 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void		linecpy(t_w3dmap *map, t_blit *it_line, size_t len, size_t ln)
 	lid = (map->size.y)++;
 	i = 0;
 	map->grid[lid] = (size_t)map->grid + (ln * sizeof(void *))
-		+ (map->size.x * lid);
+		+ (map->size.x * lid * sizeof(t_w3dmb));
 	while (i++ < len)
 		map->grid[lid][i++] = *((t_w3dmb *)ft_blstiter(it_line));
 	while (i++ < map->size.x)
@@ -51,5 +51,6 @@ int				w3dp_rendermap(t_pdata *dat)
 	ft_blstfree(&(dat->blist[1]));
 	ft_blstfree(&(dat->blist[2]));
 	dat->len[2] = 0;
+	dat->len[3] = 0;
 	return ((map && map->grid) ? 1 : 0);
 }
