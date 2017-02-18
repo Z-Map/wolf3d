@@ -6,10 +6,11 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 14:49:04 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 13:06:15 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 22:04:44 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "wolf3d.h"
 
 static t_v3f		w3d_getphymov(t_w3dlvl *lvl, t_w3dpc pc)
@@ -78,4 +79,30 @@ void				w3d_update_pcmov(t_w3dpc *player)
 		player->look.x -= player->speed * ftime;
 	else if (player->movkey & W3D_PCK_LRI)
 		player->look.x += player->speed * ftime;
+}
+
+t_v2i				w3d_find_playerstart(t_w3dmap *map)
+{
+	t_v2i			pos1;
+	t_v2i			pos2;
+	int				i;
+	int				j;
+	t_w3dbox		*b;
+
+	pos1 = (t_v2i){-1, -1};
+	pos2 = (t_v2i){0, 0};
+	i = map->size.y;
+	while (i--)
+	{
+		j = map->size.x;
+		while (j--)
+		{
+			b = w3dlvl_getbox(map, i, j);
+			if (b && (b->flags & W3D_BLOC_PLAYER))
+				pos1 = ((pos1.x == -1) || (rand() & 1)) ? (t_v2i){i, j} : pos1;
+			if (b && !(b->flags & W3D_BLOC_COLLIDER))
+				pos2 = (t_v2i){i, j};
+		}
+	}
+	return ((pos1.x >= 0) ? pos1 : pos2);
 }

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 14:02:00 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 23:24:59 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ struct			s_wolf3d_player
 # define W3D_BLOC_COLLIDER	0x2
 # define W3D_BLOC_TEX		0x4
 # define W3D_BLOC_ACTIVATOR	0x8
+# define W3D_BLOC_PLAYER	0x10
 
 struct			s_wolf3d_box
 {
@@ -325,11 +326,12 @@ float			w3d_drawwall(mglimg *scr, t_v2i *px, int height, t_ray *ray);
 float			w3d_drawplane(t_w3d *w3d, t_w3dlvl *lvl, t_v2i *px, t_v2f l);
 int				w3d_start_renderthreads(t_w3dl *lay, t_w3d *w3d);
 int				w3d_event_process_lvl(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
-t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
+t_w3dlvl		w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
 int				w3d_parse_cfg(t_w3d *w3d, const char *path, t_w3dmap *map);
 t_w3dl			w3d_delete_lvl(void);
 void			w3d_update_pcmov(t_w3dpc *player);
 void			w3d_update_player(t_w3d *w3d, t_w3dlvl *lvl);
+t_v2i			w3d_find_playerstart(t_w3dmap *map);
 
 t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y);
 t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y);

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 16:39:15 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 02:22:50 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 22:18:47 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,10 @@ static void	free_init_data(t_w3d *w3d, const char **msg)
 {
 	if (w3d_free_rdrdata(w3d))
 		*msg = "Error int render data";
-	
+	if (!w3d->layers || (w3d->layers->layer.type == W3D_ERROR))
+		*msg = "Failed to load map";
+	if (w3d->layers)
+		free(w3d->layers);
 }
 
 int			w3d_nicequit(t_w3d *w3d, int ret)

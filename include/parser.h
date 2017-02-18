@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 15:26:17 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 15:12:18 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 20:59:17 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int			w3dp_getbloc(t_blst *blocs, int id, t_w3dbox **bloc);
 void		w3dp_blocprop(char *line, t_w3dbox *bloc);
 t_w3dbox	w3d_mkbox(int userid);
 
-int			w3dp_newmap(t_pdata *dat);
-int			w3dp_mapline(t_pdata *dat);
+int			w3dp_newmap(t_w3d *w3d, t_pdata *dat, const char *line);
+int			w3dp_mapline(t_w3d *w3d, t_pdata *dat);
 int			w3dp_rendermap(t_pdata *dat);
 
 int			w3dp_bloc_col(const char *name, const char *val, void *bloc);

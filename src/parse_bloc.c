@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 20:54:15 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 01:35:11 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 21:17:56 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ static int	bloc_type_parse(const char *val, t_w3dbox *bloc)
 		bloc->flags |= W3D_BLOC_COLLIDER;
 	if (!ft_strncmp(val, "actor", 5) && (ret = 5))
 		bloc->flags |= W3D_BLOC_ACTIVATOR;
+	if (!ft_strncmp(val, "player", 6) && (ret = 6))
+		bloc->flags |= W3D_BLOC_PLAYER;
 	return (ret);
 }
 

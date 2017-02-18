@@ -6,10 +6,11 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 15:50:44 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 13:06:15 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 23:26:09 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "parser.h"
 
 static int		parse_init(t_w3d *w3d, t_pdata *dat, t_w3dmap *map)
@@ -27,63 +28,119 @@ static int		parse_init(t_w3d *w3d, t_pdata *dat, t_w3dmap *map)
 	dat->buf[PBUFS] = '\0';
 	dat->buf[PBUFS + 1] = (ret < PBUFS) ? 0 : 1;
 	dat->blist[0] = ft_blstnew(sizeof(t_w3dmap), 8);
-	dat->blist[1] = ft_blstnew(sizeof(t_w3dmb), 64);
-	dat->blist[2] = ft_blstnew(sizeof(size_t), 32);
+	dat->blist[1] = NULL;
+	dat->blist[2] = NULL;
 	dat->data[0] = map;
+	dat->data[1] = NULL;
 	*map = w3d->default_cfg;
 	map->height = (t_v2f){0.0f, 2.0f};
-	if (ft_sscanf(dat->buf, "#map %*s %255s", cfg) == 1)
+	map->grid = NULL;
+	if (ft_sscanf(dat->buf, "#map %*s %255s", cfg) >= 1)
 		w3d_parse_cfg(w3d, cfg, map);
 	else
 		map->flags = W3D_MAP_STATIC;
+	dat->ret[15] = 0;
 	// dat->data[1] = ft_blststore(dat->blist[0], map);
 	return (1);
 }
 
-static int		parse_loop(t_pdata *dat)
+static int		parse_loop(t_w3d *w3d, t_pdata *dat)
 {
 	char		sav;
 	int			ret;
+	int			check;
 
 	sav = '\n';
-	while ((ret = w3dp_nextline(dat)) >= 0)
+	check = 1;
+	while (check && ((ret = w3dp_nextline(dat)) >= 0))
 	{
 		if (!dat->c[ret])
 			sav = '\0';
 		dat->c[ret] = '\0';
 		if (dat->c[0] == '[')
-			w3dp_newmap(dat);
+			check = w3dp_newmap(w3d, dat, dat->c);
 		else
-			w3dp_mapline(dat);
+			check = w3dp_mapline(w3d, dat);
+		ft_printf("%i for line : %s\n", check, dat->c);
 		dat->c[ret] = sav;
 	}
-	return (1);
+	return (check);
 }
 
-static t_w3dmap	*create_layerdata(t_pdata *dat)
+static t_w3dmap	*create_layerdata(t_pdata *dat, int *len)
 {
+	t_blit		it;
+	t_w3dmap	*map;
+	t_w3dmap	*maps;
+	int			i;
 
+	ft_printf("Layer setup\n");
+	if (!w3dp_rendermap(dat))
+		dat->error = 0;
+	*len = 0;
+	it = (t_blit){dat->blist[0], 0};
+	while ((map = ft_blstiter(&it)))
+		*len += (map->grid) ? 1 : 0;
+	if (!(*len) && !(maps = malloc(*len * sizeof(t_w3dmap))))
+		return (NULL);
+	i = 0;
+	it = (t_blit){dat->blist[0], 0};
+	while ((map = (t_w3dmap *)ft_blstiter(&it)))
+	{
+		if (map->grid)
+			maps[i++] = *map;
+	}
+	i = *len;
+	return (map);
 }
 
-t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer)
+static void		setup_layer(t_w3dlvl *lvl)
+{
+	t_v2i		v2;
+
+	ft_printf("Layer setup\n");
+	lvl->active_lvl = 0;
+	v2 = w3d_find_playerstart(lvl->lvl_data);
+	lvl->player = (t_w3dpc){ .movkey = 0, .flags = 0,
+		.position = (t_v3f){(float)v2.x + 0.5f, (float)v2.y + 0.5f, 0.5f},
+		.speed = 3.0f, .movement = (t_v3f){ 0.0f, 0.0f, 0.0f},
+		.eyes = (t_v3f){ 0.0f, 0.0f, 0.0f}, .look = (t_v2f){0.0f, 0.0f},
+		.fov = (t_v2f){1.047197551f, 1.047197551f}};
+	lvl->size = lvl->lvl_data->size;
+	lvl->height = lvl->lvl_data->height;
+	lvl->layer.type = W3D_LVL;
+	lvl->layer.flags = W3DLAY_PRESSINPUT | W3DLAY_RELEASEINPUT;
+	lvl->layer.drawer = &w3d_draw_lvl;
+	lvl->layer.evt_process = &w3d_event_process_lvl;
+}
+
+t_w3dlvl		w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer)
 {
 	t_pdata		dat;
-	int			fd;
 	t_w3dmap	map;
+	t_w3dlvl	lvl;
 
+	lvl = layer.level;
 	dat.error = 1;
+	ft_printf("try to parse map %s\n", path);
 	if (path && (path[0] == '@') && ft_filename_ext(w3d->paths.lvl_file,
 		path + 1, ".w3dl", w3d->paths.lvl_len))
 		path = w3d->paths.lvl_dir;
-	if ((fd = open(path, O_RDONLY)) < 0)
-		return (layer);
+	ft_printf("Try to open map\n");
+	if ((dat.fd = open(path, O_RDONLY)) < 0)
+		return (lvl);
+	ft_printf("Map opended\n");
 	if ((dat.error = parse_init(w3d, &dat, &map)))
 	{
-		if (dat.error = parse_loop(&dat))
-		{
-			layer.level.lvl_data = create_layerdata(&dat);
-		}
+		ft_printf("Map parser inited\n");
+		if ((dat.error = parse_loop(w3d, &dat)) && (lvl.lvl_data =
+			create_layerdata(&dat, &(lvl.level_num))))
+			setup_layer(&lvl);
+		ft_blstfree(&(dat.blist[0]));
+		ft_blstfree(&(dat.blist[1]));
+		ft_blstfree(&(dat.blist[2]));
 	}
-	close(fd);
-	return (layer);
+	close(dat.fd);
+	ft_printf("Layer return %i %p\n", lvl.layer.type, lvl.lvl_data);
+	return (lvl);
 }

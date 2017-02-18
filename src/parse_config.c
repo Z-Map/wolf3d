@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 14:45:56 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 14:01:11 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 22:27:15 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,11 @@ static int		parse_loop(t_pdata *dat)
 int				w3d_parse_cfg(t_w3d *w3d, const char *path, t_w3dmap *map)
 {
 	t_pdata		dat;
+	t_w3dbox	*cfg;
 
 	dat.buf[PBUFS] = '\0';
 	dat.cursor = 0;
+	ft_printf("try to parsecfg %s\n", path);
 	if (path && (path[0] == '@') && ft_filename_ext(w3d->paths.cfg_file,
 		path + 1, ".w3dc", w3d->paths.cfg_len))
 		path = w3d->paths.cfg_dir;
@@ -104,9 +106,12 @@ int				w3d_parse_cfg(t_w3d *w3d, const char *path, t_w3dmap *map)
 		return (0);
 	if ((dat.error = parse_init(w3d, &dat)))
 	{
-		if ((dat.error = parse_loop(&dat)))
-			map->blocs = ft_blsttotab(dat.blist[0], dat.len);
-		map->bloclen = *dat.len;
+		if ((dat.error = parse_loop(&dat)) &&
+			(cfg = ft_blsttotab(dat.blist[0], dat.len)))
+		{
+			map->blocs = cfg;
+			map->bloclen = *dat.len;
+		}
 		ft_blstfree(&(dat.blist[0]));
 	}
 	close(dat.fd);

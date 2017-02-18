@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 15:10:28 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 23:17:06 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,31 @@ static int		init_data(t_w3d *w3d)
 
 static int		init_wolf3d_lvls(t_w3d *w3d, int ac, char **av)
 {
-	t_w3dl		lay;
+	t_w3dl		*lay;
+	t_w3dl		slay;
 
-
+	if (!(lay = malloc(sizeof(t_w3dl))))
+		return (0);
+	ft_printf("coucou 1\n");
+	if (ac > 1)
+		slay = w3d_parse(w3d, av[1]);
+	else
+		slay = w3d_parse(w3d, "data/levels/start.w3dl");
+	*lay = slay;
+	w3d->layers = lay;
+	ft_printf("coucou 2 %i, %p\n", slay.layer.type, lay->level.lvl_data);
+	if (lay->layer.type == W3D_ERROR)
+		return (0);
+	ft_printf("coucou 3\n");
+	w3d->active_layers[0] = lay;
+	w3d->active_laynum = 1;
+	return (1);
 }
 
 static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 {
 	w3d->textures = NULL;
+	w3d->layers = NULL;
 	w3dp_bloc_tex(NULL, NULL, w3d);
 	if (!init_data(w3d) || !mglw_init())
 		return (-121);
@@ -104,6 +121,7 @@ int				main(int argc, char **argv)
 	if ((error = init_wolf3d(&w3d, argc, argv)))
 		return (w3d_nicequit(&w3d, error));
 	ti = clock();
+	srand(time(NULL));
 	i = 0;
 	while (mglwin_run(w3d.win))
 	{

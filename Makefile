@@ -6,7 +6,7 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2017/02/15 00:36:49 by qloubier         ###   ########.fr        #
+#    Updated: 2017/02/18 22:14:01 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ SRCS		= main.c\
 			event_level.c\
 			raycast.c\
 			menu.c\
+			map.c\
 			config.c\
 			textures.c\
 			error.c\
@@ -52,6 +53,8 @@ SRCS		= main.c\
 			parse_menu.c\
 			parse_bloc.c\
 			parse_level.c\
+			parse_map.c\
+			parse_map_rdr.c\
 			parse_config.c\
 			parse_color.c\
 			utils_levelbox.c\
@@ -60,7 +63,7 @@ SRCS		= main.c\
 
 OBJ			= $(subst /,~,$(SRCS:%.c=%.o))
 
-LIBDIRS		= $(shell dirname $(LIBS))
+LIBDIRS		= $(shell for lib in $(LIBS); do dirname "$$lib"; done)
 INCDIR		+= $(LIBDIRS:%=-I%/include)#-Imglw/include -Imathex/include -Ilibft/include
 LIBFLAGS	+= $(LIBDIRS:%=-L%) $(shell basename -as .a $(LIBS) | sed -e "s/lib/-l/g")
 INTERN_SRCS	= $(SRCS:%=$(SRCDIR)/%)
