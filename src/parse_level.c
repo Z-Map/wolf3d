@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 15:50:44 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/17 18:22:47 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 13:06:15 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int		parse_init(t_w3d *w3d, t_pdata *dat, t_w3dmap *map)
 	dat->buf[PBUFS] = '\0';
 	dat->buf[PBUFS + 1] = (ret < PBUFS) ? 0 : 1;
 	dat->blist[0] = ft_blstnew(sizeof(t_w3dmap), 8);
-	dat->blist[1] = ft_blstnew(sizeof(t_w3dmb), 32);
+	dat->blist[1] = ft_blstnew(sizeof(t_w3dmb), 64);
 	dat->blist[2] = ft_blstnew(sizeof(size_t), 32);
 	dat->data[0] = map;
 	*map = w3d->default_cfg;
@@ -36,7 +36,7 @@ static int		parse_init(t_w3d *w3d, t_pdata *dat, t_w3dmap *map)
 		w3d_parse_cfg(w3d, cfg, map);
 	else
 		map->flags = W3D_MAP_STATIC;
-	dat->data[1] = ft_blststore(dat->blist[0], map);
+	// dat->data[1] = ft_blststore(dat->blist[0], map);
 	return (1);
 }
 
@@ -60,6 +60,11 @@ static int		parse_loop(t_pdata *dat)
 	return (1);
 }
 
+static t_w3dmap	*create_layerdata(t_pdata *dat)
+{
+
+}
+
 t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer)
 {
 	t_pdata		dat;
@@ -74,7 +79,10 @@ t_w3dl			w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer)
 		return (layer);
 	if ((dat.error = parse_init(w3d, &dat, &map)))
 	{
-
+		if (dat.error = parse_loop(&dat))
+		{
+			layer.level.lvl_data = create_layerdata(&dat);
+		}
 	}
 	close(fd);
 	return (layer);

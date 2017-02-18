@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 04:03:46 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 02:16:13 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 13:45:30 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,12 @@ int				w3d_rmlayout(t_w3d *w3d, t_w3dmap *map)
 {
 	int			i;
 
+	if (map->flags & W3D_MAP_STATIC)
+	{
+		map->bloclen = 0;
+		map->blocs = NULL;
+		return (0);
+	}
 	i = (int)map->bloclen;
 	while (i--)
 	{
@@ -88,6 +94,7 @@ int				w3d_rmlayout(t_w3d *w3d, t_w3dmap *map)
 	}
 	map->bloclen = 0;
 	free(map->blocs);
+	map->blocs = NULL;
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 15:05:10 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/18 14:02:00 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,6 +336,7 @@ t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y);
 t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx);
 t_w3dbox		*w3dlvl_getbox_vui(t_w3dmap *map, t_v2ui idx);
 int				w3dlvl_in(t_w3dmap *map, t_v2i idx);
+int				w3d_getblocfromid(t_w3dmap *map, int id);
 
 int				w3d_rmlayout(t_w3d *w3d, t_w3dmap *map);
 mglimg			*w3d_loadtex(t_w3d *w3d, const char *path);
