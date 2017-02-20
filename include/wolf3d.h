@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 05:28:00 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/20 16:59:43 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,6 @@
 # include "mglw/mglw.h"
 # include "mathex/vector.h"
 # include "mathex/utils.h"
-
-# define W3D_DEBUG		0x01
-# define W3D_TEXTURE	0x02
-# define W3D_MINIMAP	0x04
 
 typedef struct s_octree_node		t_oxn;
 typedef struct s_ray				t_ray;
@@ -81,6 +77,7 @@ struct			s_wolf3d_event
 # define W3D_PCK_RI		0x8
 # define W3D_PCK_LLE	0x10
 # define W3D_PCK_LRI	0x20
+# define W3D_PCK_SPEED	0x40
 
 struct			s_wolf3d_player
 {
@@ -279,6 +276,11 @@ typedef struct	s_cfg
 	char		*tex_file;
 }				t_cfg;
 
+# define W3D_DEBUG		0x01
+# define W3D_TEXTURE	0x02
+# define W3D_MINIMAP	0x04
+# define W3D_WIN		0x08
+
 struct			s_wolf3d_main
 {
 	t_w3dtex	*textures;
@@ -337,7 +339,7 @@ int				w3d_event_process_lvl(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
 t_w3dlvl		w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
 int				w3d_parse_cfg(t_w3d *w3d, const char *path, t_w3dmap *map);
 t_w3dl			w3d_delete_lvl(void);
-void			w3d_update_pcmov(t_w3dpc *player);
+void			w3d_update_pcmov(t_w3dpc *player, float speed);
 void			w3d_update_player(t_w3d *w3d, t_w3dlvl *lvl);
 t_v2i			w3d_find_playerstart(t_w3dmap *map);
 

@@ -6,64 +6,12 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 13:20:51 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 04:24:12 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/20 16:46:18 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include "wolf3d.h"
-//
-// static void			draw_col(mglimg *scr, int column, int height, t_ray *ray)
-// {
-// 	const int		offset = ((int)scr->y - height) / 2;
-// 	size_t			px;
-// 	unsigned char	*pxs;
-// 	unsigned int	y;
-// 	int				tx, ty;
-// 	float			uva, uvb;
-// 	int				yt;
-//
-// 	if ((ray->bloc) && (ray->bloc->tex))
-// 		tx = (int)((((ray->end.x  + ray->end.y) * 0.5f)
-// 		- (float)(int)((ray->end.x + ray->end.y) * 0.5f)) * ray->bloc->tex->x);
-// 	uva = 1.0 / (height + 1);
-// 	uvb = 0.0;
-// 	pxs = scr->pixels;
-// 	yt = 0;
-// 	y = 0;
-// 	if (offset > 0)
-// 		y = (unsigned int)offset;
-// 	else
-// 	{
-// 		uvb = -offset * uva;
-// 		height = (int)scr->y;
-// 	}
-// 	while (yt < (int)y)
-// 		((unsigned int *)pxs)[column + yt++ * scr->x] = 0xff;
-// 	yt = scr->y - yt;
-// 	while (height--)
-// 	{
-// 		px = column + y * scr->x;
-// 		if ((ray->bloc) && (ray->bloc->tex))
-// 		{
-// 			ty = (int)roundf(uvb * ray->bloc->tex->y) % ray->bloc->tex->y;
-// 			((unsigned int *)pxs)[px] = ((unsigned int *)(
-// 				ray->bloc->tex->pixels))[tx + (ty * ray->bloc->tex->x)];
-// 			uvb += uva;
-// 		}
-// 		else if (ray->bloc)
-// 		{
-// 			pxs[px * 4] = ray->bloc->color.r;
-// 			pxs[px * 4 + 1] = ray->bloc->color.g;
-// 			pxs[px * 4 + 2] = ray->bloc->color.b;
-// 			pxs[px * 4 + 3] = 255;
-// 		}
-// 		y++;
-// 		yt--;
-// 	}
-// 	while (yt-- > 0)
-// 		((unsigned int *)pxs)[column + y++ * scr->x] = 0xff;
-// }
 
 static void			*render_thread(void *arg)
 {
@@ -83,11 +31,6 @@ static void			*render_thread(void *arg)
 		dist *= w3d_raycast(
 			&(ctx->lay->level.lvl_data[ctx->lay->level.active_lvl]), ray);
 		ray->distance = dist;
-		// if (dist > 0.0f)
-		// 	draw_col(ctx->w3d->screen, x,
-		// 		round(((2.0 * ctx->w3d->screen->y) / dist)), ray);
-		// else
-		// 	draw_col(ctx->w3d->screen, x, 0, ray);
 		w3d_drawcol(&(ctx->lay->level), ctx, ray);
 		x -= W3D_THREADNUM;
 	}

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 13:55:55 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/23 13:15:01 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/20 17:14:53 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ int			w3d_keypress(void *root, int k)
 
 	w3d = (t_w3d *)root;
 	evt = (t_w3devt){ k, 2, 0, 0};
-	w3d_layer_evt_process(w3d, evt, W3DLAY_PRESSINPUT);
+	if (w3d->flags & W3D_WIN)
+		mglwin_stop(w3d->win);
+	else
+		w3d_layer_evt_process(w3d, evt, W3DLAY_PRESSINPUT);
 	return (0);
 }
 
@@ -54,7 +57,8 @@ int		w3d_keyrelease(void *root, int k)
 
 	w3d = (t_w3d *)root;
 	evt = (t_w3devt){ k, 0, 0, 0};
-	w3d_layer_evt_process(w3d, evt, W3DLAY_RELEASEINPUT);
+	if (!(w3d->flags & W3D_WIN))
+		w3d_layer_evt_process(w3d, evt, W3DLAY_RELEASEINPUT);
 	if (k == MGLW_KEY_F)
 		mglwin_togglefullscreen(w3d->win, 1);
 	return (0);

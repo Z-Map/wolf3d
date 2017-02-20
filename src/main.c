@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 05:33:19 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/20 18:42:04 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,14 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 	if ((!(w3d->win = mglw_openwin(
 			mglw_mkwin(MGLW_LEGACY_MODE,
 				MGLW_2DLAYER), //| MGLW_FULLSCREEN | MGLW_FULLRES),
-			800, 600, "~*( Wolf3D )*~"))))
+			1400, 900, "~*( Wolf3D )*~"))))
 		return (-120);
 	mglw_setsetting(MGLWS_EXITKEY, MGLW_KEY_ESCAPE);
 	mglw_setkcb(w3d->win, 1, &w3d_keypress, w3d);
 	mglw_setkcb(w3d->win, 2, &w3d_keyrepeate, w3d);
 	mglw_setkcb(w3d->win, 0, &w3d_keyrelease, w3d);
 	mglw_setsizecb(w3d->win, &resize_callback, w3d);
-	w3d->screen = (mglimg *)mglw_mktexture(800, 600, MGLW_RGBA, MGLWI_DYNAMIC);
+	w3d->screen = (mglimg *)mglw_mktexture(1400, 900, MGLW_RGBA, MGLWI_DYNAMIC);
 	w3d->gui = (mglimg *)mglw_get2dlayer(w3d->win);
 	if (!w3d->screen || !w3d_init_rdrdata(w3d))
 		return (-119);
@@ -132,9 +132,14 @@ int				main(int argc, char **argv)
 	i = 0;
 	while (mglwin_run(w3d.win))
 	{
-		w3d_layer_draw(&w3d);
-		w3dlvl_mainloop((t_w3dlvl *)(&(w3d.layers[0].level)), &w3d);
-		mglw_draw_itow(w3d.win, w3d.screen, 0, 0);
+		if (w3d.flags & W3D_WIN)
+			mglw_draw_itow(w3d.win, w3d.winimg, 0, 0);
+		else
+		{
+			w3d_layer_draw(&w3d);
+			w3dlvl_mainloop((t_w3dlvl *)(&(w3d.layers[0].level)), &w3d);
+			mglw_draw_itow(w3d.win, w3d.screen, 0, 0);
+		}
 		ti = clock() - ti;
 		timer = (double)ti / CLOCKS_PER_SEC;
 		avg += timer;
