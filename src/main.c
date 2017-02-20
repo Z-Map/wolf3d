@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 23:17:06 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/20 05:33:19 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ static void		resize_callback(void *arg, int w, int h)
 	t_w3d		*w3d;
 
 	w3d = (t_w3d *)arg;
-	w3d->screen = (mglimg *)mglw_get2dlayer(w3d->win);
+	mglw_resizeimg(w3d->screen, w, h, MGLW_TF_UNDEFINED);
+	w3d->gui = (mglimg *)mglw_get2dlayer(w3d->win);
+	ft_bzero(w3d->gui->pixels, w3d->gui->memlen);
+	w3d_drawimg(w3d, 10, -10, w3d->helpimg);
 	if (w3d_free_rdrdata(w3d) || !w3d_init_rdrdata(w3d))
 		mglwin_shouldclose(w3d->win);
 	w3d_update_rdrdata(w3d->render, w, h);
@@ -62,21 +65,21 @@ static int		init_data(t_w3d *w3d)
 static int		init_wolf3d_lvls(t_w3d *w3d, int ac, char **av)
 {
 	t_w3dl		*lay;
-	t_w3dl		slay;
 
-	if (!(lay = malloc(sizeof(t_w3dl))))
+	ft_bzero(w3d->gui->pixels, w3d->gui->memlen);
+	if (!(w3d->openimg = w3d_loadtex(w3d, "@gui/exit_open.png"))
+		|| !(w3d->winimg = w3d_loadtex(w3d, "@gui/win.png"))
+		|| !(w3d->helpimg = w3d_loadtex(w3d, "@gui/found_key_msg.png"))
+		|| !(lay = malloc(sizeof(t_w3dl))))
 		return (0);
-	ft_printf("coucou 1\n");
+	w3d_drawimg(w3d, 10, -10, w3d->helpimg);
 	if (ac > 1)
-		slay = w3d_parse(w3d, av[1]);
+		*lay = w3d_parse(w3d, av[1]);
 	else
-		slay = w3d_parse(w3d, "data/levels/start.w3dl");
-	*lay = slay;
+		*lay = w3d_parse(w3d, "data/levels/start.w3dl");
 	w3d->layers = lay;
-	ft_printf("coucou 2 %i, %p\n", slay.layer.type, lay->level.lvl_data);
 	if (lay->layer.type == W3D_ERROR)
 		return (0);
-	ft_printf("coucou 3\n");
 	w3d->active_layers[0] = lay;
 	w3d->active_laynum = 1;
 	return (1);
@@ -86,6 +89,8 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 {
 	w3d->textures = NULL;
 	w3d->layers = NULL;
+	w3d->default_cfg.height = (t_v2f){0.0f, 2.0f};
+	w3d->default_cfg.grid = NULL;
 	w3dp_bloc_tex(NULL, NULL, w3d);
 	if (!init_data(w3d) || !mglw_init())
 		return (-121);
@@ -99,8 +104,9 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 	mglw_setkcb(w3d->win, 2, &w3d_keyrepeate, w3d);
 	mglw_setkcb(w3d->win, 0, &w3d_keyrelease, w3d);
 	mglw_setsizecb(w3d->win, &resize_callback, w3d);
-	w3d->screen = (mglimg *)mglw_get2dlayer(w3d->win);
-	if (!w3d_init_rdrdata(w3d))
+	w3d->screen = (mglimg *)mglw_mktexture(800, 600, MGLW_RGBA, MGLWI_DYNAMIC);
+	w3d->gui = (mglimg *)mglw_get2dlayer(w3d->win);
+	if (!w3d->screen || !w3d_init_rdrdata(w3d))
 		return (-119);
 	w3d_update_rdrdata(w3d->render, w3d->screen->x, w3d->screen->y);
 	// init_testdata(w3d);
@@ -118,14 +124,17 @@ int				main(int argc, char **argv)
 	double				avg;
 	int					error, i;
 
+	srand(time(NULL));
 	if ((error = init_wolf3d(&w3d, argc, argv)))
 		return (w3d_nicequit(&w3d, error));
 	ti = clock();
-	srand(time(NULL));
+	ft_printf("rand %i\n", rand());
 	i = 0;
 	while (mglwin_run(w3d.win))
 	{
 		w3d_layer_draw(&w3d);
+		w3dlvl_mainloop((t_w3dlvl *)(&(w3d.layers[0].level)), &w3d);
+		mglw_draw_itow(w3d.win, w3d.screen, 0, 0);
 		ti = clock() - ti;
 		timer = (double)ti / CLOCKS_PER_SEC;
 		avg += timer;

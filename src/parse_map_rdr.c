@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 14:19:04 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 23:08:03 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/19 03:48:14 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,16 @@ static void		linecpy(t_w3dmap *map, t_blit *it_line, size_t len, size_t ln)
 
 	mbd = (t_w3dmb){ .id = w3d_getblocfromid(map, -1), .flags = 0,
 		.sub_data = NULL};
-	lid = (map->size.y)++;
+	lid = map->size.y;
 	i = 0;
-	map->grid[lid] = (t_w3dmb *)((size_t)map->grid + (ln * sizeof(void *))
+	map->grid[lid] = (t_w3dmb *)((size_t)(map->grid) + (ln * sizeof(void *))
 		+ (map->size.x * lid * sizeof(t_w3dmb)));
-	while (i++ < len)
+	while (i < len)
 		map->grid[lid][i++] = *((t_w3dmb *)ft_blstiter(it_line));
-	while (i++ < map->size.x)
+	while (i < map->size.x)
 		map->grid[lid][i++] = mbd;
+	if (lid < ln)
+		map->size.y++;
 }
 
 int				w3dp_rendermap(t_pdata *dat)
@@ -48,6 +50,7 @@ int				w3dp_rendermap(t_pdata *dat)
 		map->size = (t_v2ui){(t_ui)dat->len[3], 0};
 		while ((ls = ft_blstiter(&it_len)))
 			linecpy(map, &it_line, *ls, dat->len[2]);
+		ft_printf("size map %u, %u\n", map->size.x, map->size.y);
 		if (!dat->ret[15] && (map->blocs == ((t_w3dmap *)dat->data[0])->blocs))
 			dat->ret[15] = 1;
 	}

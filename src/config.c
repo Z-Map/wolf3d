@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 04:03:46 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 13:45:30 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/19 20:21:21 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void			w3dp_blocprop(char *line, t_w3dbox *bloc)
 {
 	const t_kf	atbl[] = {{"color", &w3dp_bloc_col},
 		{"layer", &w3dp_bloc_layer}, {"type",  &w3dp_bloc_type},
-		{"ctex", &w3dp_bloc_tex}, {"gtex", &w3dp_bloc_tex},
+		{"rtex", &w3dp_bloc_tex}, {"gtex", &w3dp_bloc_tex},
 		{"wtex", &w3dp_bloc_tex}, {NULL, NULL}};
 
 	if (!bloc)

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 14:49:04 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 22:04:44 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/19 04:47:53 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,10 @@ t_v2i				w3d_find_playerstart(t_w3dmap *map)
 		j = map->size.x;
 		while (j--)
 		{
-			b = w3dlvl_getbox(map, i, j);
+			b = w3dlvl_getbox(map, i, j, 0);
 			if (b && (b->flags & W3D_BLOC_PLAYER))
-				pos1 = ((pos1.x == -1) || (rand() & 1)) ? (t_v2i){i, j} : pos1;
+				pos1 = ((pos1.x == -1) ||
+					((rand() % 10) > 5)) ? (t_v2i){i, j} : pos1;
 			if (b && !(b->flags & W3D_BLOC_COLLIDER))
 				pos2 = (t_v2i){i, j};
 		}

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/07 14:37:57 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/03 00:04:11 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/19 04:49:38 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_ray			w3d_rayloopy(t_w3dmap *map, t_ray ray)
 	idx.y += dir;
 	while (w3dlvl_in(map, idx))
 	{
-		if ((bloc = w3dlvl_getbox_vi(map, idx)) && (
+		if ((bloc = w3dlvl_getbox_vi(map, idx, W3D_BLOC_VISITED)) && (
 			(ray.flags & (t_ul)bloc->flags) ||
 			(!(ray.flags & RAY_NOLAYER) && !(bloc->layer & lay))))
 		{
@@ -55,7 +55,7 @@ t_ray			w3d_rayloopx(t_w3dmap *map, t_ray ray)
 	idx.x += dir;
 	while (w3dlvl_in(map, idx))
 	{
-		if ((bloc = w3dlvl_getbox_vi(map, idx)) && (
+		if ((bloc = w3dlvl_getbox_vi(map, idx, W3D_BLOC_VISITED)) && (
 			(ray.flags & (t_ul)bloc->flags) ||
 			(!(ray.flags & RAY_NOLAYER) && !(bloc->layer & lay))))
 		{
@@ -109,7 +109,7 @@ t_ray			w3d_rayloop(t_w3dmap *map, t_ray ray)
 	while (rl_process(map, &ray, &pos, &idx)
 		&& ((ray.distance <= 0.0f) || (pos.z <= ray.distance)))
 	{
-		if ((bloc = w3dlvl_getbox_vi(map, idx)) && (
+		if ((bloc = w3dlvl_getbox_vi(map, idx, W3D_BLOC_VISITED)) && (
 			(ray.flags & (t_ul)bloc->flags) ||
 			(!(ray.flags & RAY_NOLAYER) && !(bloc->layer & lay))))
 			return (w3d_rayend(ray, &idx, bloc, pos.z));

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/10 14:53:51 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 02:03:55 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/20 05:26:12 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ int				w3d_unloadtex(t_w3d *w3d, mglimg *img)
 	t_w3dtex	*tex;
 	t_w3dtex	*btex;
 
+	if (!img)
+		return (0);
 	btex = (t_w3dtex *)w3d;
 	while (btex->next && (btex->next->img != img))
 		btex = btex->next;

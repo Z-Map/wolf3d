@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 16:39:15 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 22:18:47 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/20 05:36:55 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,12 @@ static void	free_init_data(t_w3d *w3d, const char **msg)
 {
 	if (w3d_free_rdrdata(w3d))
 		*msg = "Error int render data";
+	if (!w3d_unloadtex(w3d, w3d->helpimg) || !w3d_unloadtex(w3d, w3d->openimg)
+		|| !w3d_unloadtex(w3d, w3d->winimg))
+		*msg = "Failed to load texture";
 	if (!w3d->layers || (w3d->layers->layer.type == W3D_ERROR))
 		*msg = "Failed to load map";
+	w3dlvl_free(&(w3d->layers->level), w3d);
 	if (w3d->layers)
 		free(w3d->layers);
 }
@@ -61,10 +65,10 @@ int			w3d_nicequit(t_w3d *w3d, int ret)
 	const char	*msg;
 
 	msg = free_basedata(w3d);
-	if (ret > -121)
-		quit_mglw(w3d, &msg);
 	if (ret > -120)
 		free_init_data(w3d, &msg);
+	if (ret > -121)
+		quit_mglw(w3d, &msg);
 	if (ret)
 		ft_printf("Error : %s\n", msg);
 	return (ret);

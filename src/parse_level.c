@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 15:50:44 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 23:26:09 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/19 04:17:28 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,18 @@ static int		parse_init(t_w3d *w3d, t_pdata *dat, t_w3dmap *map)
 	dat->data[0] = map;
 	dat->data[1] = NULL;
 	*map = w3d->default_cfg;
-	map->height = (t_v2f){0.0f, 2.0f};
 	map->grid = NULL;
+	ret = 0;
+	dat->ret[15] = 1;
 	if (ft_sscanf(dat->buf, "#map %*s %255s", cfg) >= 1)
-		w3d_parse_cfg(w3d, cfg, map);
+		ret = w3d_parse_cfg(w3d, cfg, map);
+	if (ret)
+		dat->ret[15] = 0;
 	else
 		map->flags = W3D_MAP_STATIC;
-	dat->ret[15] = 0;
 	// dat->data[1] = ft_blststore(dat->blist[0], map);
+	// ft_printf("Coucou ! %lu %lu\n", *((t_ui *)map));
+	// ft_printf("Coucou !%u\n", map->bloclen);
 	return (1);
 }
 
@@ -61,7 +65,6 @@ static int		parse_loop(t_w3d *w3d, t_pdata *dat)
 			check = w3dp_newmap(w3d, dat, dat->c);
 		else
 			check = w3dp_mapline(w3d, dat);
-		ft_printf("%i for line : %s\n", check, dat->c);
 		dat->c[ret] = sav;
 	}
 	return (check);
@@ -74,14 +77,13 @@ static t_w3dmap	*create_layerdata(t_pdata *dat, int *len)
 	t_w3dmap	*maps;
 	int			i;
 
-	ft_printf("Layer setup\n");
 	if (!w3dp_rendermap(dat))
 		dat->error = 0;
 	*len = 0;
 	it = (t_blit){dat->blist[0], 0};
 	while ((map = ft_blstiter(&it)))
 		*len += (map->grid) ? 1 : 0;
-	if (!(*len) && !(maps = malloc(*len * sizeof(t_w3dmap))))
+	if (!(*len) || !(maps = malloc(*len * sizeof(t_w3dmap))))
 		return (NULL);
 	i = 0;
 	it = (t_blit){dat->blist[0], 0};
@@ -90,15 +92,13 @@ static t_w3dmap	*create_layerdata(t_pdata *dat, int *len)
 		if (map->grid)
 			maps[i++] = *map;
 	}
-	i = *len;
-	return (map);
+	return (maps);
 }
 
 static void		setup_layer(t_w3dlvl *lvl)
 {
 	t_v2i		v2;
 
-	ft_printf("Layer setup\n");
 	lvl->active_lvl = 0;
 	v2 = w3d_find_playerstart(lvl->lvl_data);
 	lvl->player = (t_w3dpc){ .movkey = 0, .flags = 0,
@@ -118,29 +118,22 @@ t_w3dlvl		w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer)
 {
 	t_pdata		dat;
 	t_w3dmap	map;
-	t_w3dlvl	lvl;
 
-	lvl = layer.level;
 	dat.error = 1;
-	ft_printf("try to parse map %s\n", path);
 	if (path && (path[0] == '@') && ft_filename_ext(w3d->paths.lvl_file,
 		path + 1, ".w3dl", w3d->paths.lvl_len))
 		path = w3d->paths.lvl_dir;
-	ft_printf("Try to open map\n");
 	if ((dat.fd = open(path, O_RDONLY)) < 0)
-		return (lvl);
-	ft_printf("Map opended\n");
+		return (layer.level);
 	if ((dat.error = parse_init(w3d, &dat, &map)))
 	{
-		ft_printf("Map parser inited\n");
-		if ((dat.error = parse_loop(w3d, &dat)) && (lvl.lvl_data =
-			create_layerdata(&dat, &(lvl.level_num))))
-			setup_layer(&lvl);
+		if ((dat.error = parse_loop(w3d, &dat)) && (layer.level.lvl_data =
+			create_layerdata(&dat, &(layer.level.level_num))))
+			setup_layer(&(layer.level));
 		ft_blstfree(&(dat.blist[0]));
 		ft_blstfree(&(dat.blist[1]));
 		ft_blstfree(&(dat.blist[2]));
 	}
 	close(dat.fd);
-	ft_printf("Layer return %i %p\n", lvl.layer.type, lvl.lvl_data);
-	return (lvl);
+	return (layer.level);
 }

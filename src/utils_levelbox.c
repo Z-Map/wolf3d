@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 06:09:27 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 13:12:35 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/19 04:51:10 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int				w3dlvl_in(t_w3dmap *map, t_v2i idx)
 	return (0);
 }
 
-t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y)
+t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y, int toggle)
 {
 	int			i;
 
@@ -29,6 +29,8 @@ t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y)
 		(x >= (int)map->size.x) || (y >= (int)map->size.y))
 		return (NULL);
 	i = map->grid[y][x].id;
+	if (toggle)
+		map->grid[y][x].flags |= toggle;
 	if (mxabs(i) >= (int)map->bloclen)
 		return (NULL);
 	if (i < 0)
@@ -36,13 +38,15 @@ t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y)
 	return (map->blocs + i);
 }
 
-t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y)
+t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y, int toggle)
 {
 	int			i;
 
 	if ((x >= map->size.x) || (y >= map->size.y))
 		return (NULL);
 	i = map->grid[y][x].id;
+	if (toggle)
+		map->grid[y][x].flags |= toggle;
 	if (mxabs(i) >= (int)map->bloclen)
 		return (NULL);
 	if (i < 0)
@@ -50,7 +54,7 @@ t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y)
 	return (map->blocs + i);
 }
 
-t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx)
+t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx, int toggle)
 {
 	int			i;
 
@@ -58,6 +62,8 @@ t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx)
 		(idx.x >= (int)map->size.x) || (idx.y >= (int)map->size.y))
 		return (NULL);
 	i = map->grid[idx.y][idx.x].id;
+	if (toggle)
+		map->grid[idx.y][idx.x].flags |= toggle;
 	if (mxabs(i) >= (int)map->bloclen)
 		return (NULL);
 	if (i < 0)
@@ -65,13 +71,15 @@ t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx)
 	return (map->blocs + i);
 }
 
-t_w3dbox		*w3dlvl_getbox_vui(t_w3dmap *map, t_v2ui idx)
+t_w3dbox		*w3dlvl_getbox_vui(t_w3dmap *map, t_v2ui idx, int toggle)
 {
 	int			i;
 
 	if ((idx.x >= map->size.x) || (idx.y >= map->size.y))
 		return (NULL);
 	i = map->grid[idx.y][idx.x].id;
+	if (toggle)
+		map->grid[idx.y][idx.x].flags |= toggle;
 	if (mxabs(i) >= (int)map->bloclen)
 		return (NULL);
 	if (i < 0)

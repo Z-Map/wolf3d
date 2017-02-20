@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 20:08:57 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/03 00:04:26 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/19 04:49:54 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_ul			w3d_raystart(t_w3dmap *map, t_ray *ray, t_v3f *pos, t_v2i *idx)
 		if (ray->dir.y > 0.0f)
 			pos->y += 1.0f;
 	}
-	if (!(bloc = w3dlvl_getbox_vi(map, *idx)))
+	if (!(bloc = w3dlvl_getbox_vi(map, *idx, W3D_BLOC_VISITED)))
 		return (1);
 	return (bloc->layer);
 }
