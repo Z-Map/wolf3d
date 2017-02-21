@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 22:43:06 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/19 03:41:42 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 22:33:44 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,19 @@ int				w3dp_newmap(t_w3d *w3d, t_pdata *dat, const char *line)
 	char		cfg[256];
 	int			ret;
 
-	if ((dat->data[1] && !w3dp_rendermap(dat)) ||
+	if (dat->data[1] && !dat->len[2])
+	{
+		if (((t_w3dmap *)(dat->data[1]))->blocs !=
+			((t_w3dmap *)(dat->data[0]))->blocs)
+			w3d_rmlayout(w3d, dat->data[1]);
+	}
+	else if ((dat->data[1] && !w3dp_rendermap(dat)) ||
 		!(dat->blist[1] = ft_blstnew(sizeof(t_w3dmb), 64)) ||
 		!(dat->blist[2] = ft_blstnew(sizeof(size_t), 32)) ||
 		!(dat->data[1] = ft_blststore(dat->blist[0], dat->data[0])))
 		return (0);
 	ret = 0;
-	if (line && (ft_sscanf(line, "[%*s %255s]", cfg) >= 1))
+	if (line && (ft_sscanf(line, "[%*s %255s ]", cfg) >= 1))
 		ret = w3d_parse_cfg(w3d, cfg, dat->data[1]);
 	if (!ret && (dat->ret[15]))
 		((t_w3dmap *)(dat->data[1]))->flags = W3D_MAP_STATIC;

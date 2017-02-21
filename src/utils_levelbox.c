@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/23 06:09:27 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/19 04:51:10 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 17:31:48 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int				w3dlvl_in(t_w3dmap *map, t_v2i idx)
 	return (0);
 }
 
-t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y, int toggle)
+t_w3dbox		*w3dlvl_getbox(const t_w3dmap *map, int x, int y, int toggle)
 {
 	int			i;
 
@@ -38,7 +38,8 @@ t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y, int toggle)
 	return (map->blocs + i);
 }
 
-t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y, int toggle)
+t_w3dbox		*w3dlvl_getbox_ui(const t_w3dmap *map, t_ui x, t_ui y,
+					int toggle)
 {
 	int			i;
 
@@ -54,7 +55,7 @@ t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y, int toggle)
 	return (map->blocs + i);
 }
 
-t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx, int toggle)
+t_w3dbox		*w3dlvl_getbox_vi(const t_w3dmap *map, t_v2i idx, int toggle)
 {
 	int			i;
 
@@ -71,7 +72,7 @@ t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx, int toggle)
 	return (map->blocs + i);
 }
 
-t_w3dbox		*w3dlvl_getbox_vui(t_w3dmap *map, t_v2ui idx, int toggle)
+t_w3dbox		*w3dlvl_getbox_vui(const t_w3dmap *map, t_v2ui idx, int toggle)
 {
 	int			i;
 

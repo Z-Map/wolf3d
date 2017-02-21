@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/18 14:19:04 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/19 03:48:14 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 22:22:56 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int				w3dp_rendermap(t_pdata *dat)
 		map->size = (t_v2ui){(t_ui)dat->len[3], 0};
 		while ((ls = ft_blstiter(&it_len)))
 			linecpy(map, &it_line, *ls, dat->len[2]);
-		ft_printf("size map %u, %u\n", map->size.x, map->size.y);
 		if (!dat->ret[15] && (map->blocs == ((t_w3dmap *)dat->data[0])->blocs))
 			dat->ret[15] = 1;
 	}

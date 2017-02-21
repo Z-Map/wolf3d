@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 15:26:17 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 20:59:17 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 18:15:36 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct		s_parsedata
 	size_t			len[16];
 	int				ret[16];
 }					t_pdata;
+
+void		w3dp_parsedat_init(t_pdata *dat);
 
 int			w3dp_nextline(t_pdata *dat);
 void		w3d_parse_bloc(t_pdata *dat, char *buf);

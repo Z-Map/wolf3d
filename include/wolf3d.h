@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 16:59:43 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 17:31:47 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,6 +303,9 @@ struct			s_wolf3d_main
 	t_w3dmap	default_cfg;
 };
 
+t_ui			w3d_getpx(mglimg *img, int x, int y);
+void			w3d_setpx(mglimg *img, int x, int y, t_ui col);
+
 t_w3dl			w3d_parse(t_w3d *w3d, const char *path);
 
 int				w3d_keypress(void *root, int k);
@@ -334,6 +337,7 @@ void			w3d_drawcol(t_w3dlvl *lvl, t_w3dthr *ctx, t_ray *ray);
 t_ui			w3d_drawshade(t_ui col, t_v3f nor);
 float			w3d_drawwall(mglimg *scr, t_v2i *px, int height, t_ray *ray);
 float			w3d_drawplane(t_w3d *w3d, t_w3dlvl *lvl, t_v2i *px, t_v2f l);
+void			w3d_drawminimap(t_w3dlvl *lvl, t_w3d *w3d);
 int				w3d_start_renderthreads(t_w3dl *lay, t_w3d *w3d);
 int				w3d_event_process_lvl(t_w3dl *lay, t_w3d *w3d, t_w3devt evt);
 t_w3dlvl		w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer);
@@ -345,10 +349,10 @@ t_v2i			w3d_find_playerstart(t_w3dmap *map);
 
 void			w3dlvl_mainloop(t_w3dlvl *lvl, t_w3d *w3d);
 void			w3dlvl_free(t_w3dlvl *lvl, t_w3d *w3d);
-t_w3dbox		*w3dlvl_getbox(t_w3dmap *map, int x, int y, int toggle);
-t_w3dbox		*w3dlvl_getbox_ui(t_w3dmap *map, t_ui x, t_ui y, int toggle);
-t_w3dbox		*w3dlvl_getbox_vi(t_w3dmap *map, t_v2i idx, int toggle);
-t_w3dbox		*w3dlvl_getbox_vui(t_w3dmap *map, t_v2ui idx, int toggle);
+t_w3dbox		*w3dlvl_getbox(const t_w3dmap *map, int x, int y, int toggle);
+t_w3dbox		*w3dlvl_getbox_ui(const t_w3dmap *map, t_ui x, t_ui y, int tgl);
+t_w3dbox		*w3dlvl_getbox_vi(const t_w3dmap *map, t_v2i idx, int toggle);
+t_w3dbox		*w3dlvl_getbox_vui(const t_w3dmap *map, t_v2ui idx, int toggle);
 int				w3dlvl_in(t_w3dmap *map, t_v2i idx);
 int				w3d_getblocfromid(t_w3dmap *map, int id);
 int				w3d_allkeyfound(t_w3dmap *map);

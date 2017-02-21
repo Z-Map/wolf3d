@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 04:27:41 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 17:18:53 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,42 +100,6 @@ void			w3d_drawcol(t_w3dlvl *lvl, t_w3dthr *ctx, t_ray *ray)
 	}
 }
 
-#include <stdio.h>
-static void		w3d_drawminimap(t_w3dlvl *lvl, t_w3d *w3d)
-{
-	t_v2i		p;
-	t_v2i		t;
-	t_w3dmap	*map;
-	t_w3dbox	*bloc;
-
-	map = &(lvl->lvl_data[lvl->active_lvl]);
-	t = (t_v2i){mxmin((int)map->size.x * 6, w3d->screen->x),
-		mxmin((int)map->size.y * 6, w3d->screen->y - 1)};
-	p = (t_v2i){w3d->screen->x, t.y};
-	while (p.x-- > 0 && t.x-- >= 0)
-		((t_ui *)(w3d->gui->pixels))[p.x + (p.y * w3d->gui->x)] = 0xff000000;
-	while (p.y-- > 0)
-	{
-		t.y--;
-		p.x = w3d->screen->x;
-		t.x = mxmin((int)map->size.x * 6, w3d->screen->x);
-		while ((p.x-- > 0) && (t.x > 0))
-		{
-			bloc = w3dlvl_getbox(map, --t.x / 6, t.y / 6, 0);
-			if (bloc && (((map->grid)[t.y / 6][t.x / 6].flags) & W3D_BLOC_VISITED))
-				((t_ui *)(w3d->gui->pixels))[p.x + (p.y * w3d->gui->x)]
-					= *((t_ui *)&(bloc->color));
-			else
-				((t_ui *)(w3d->gui->pixels))[p.x + (p.y * w3d->gui->x)] = 0xd0000000;
-			if (((t.y / 6) == (int)(lvl->player.position.y)) &&
-				((t.x / 6) == (int)(lvl->player.position.x)))
-				((t_ui *)(w3d->gui->pixels))[p.x + (p.y * w3d->gui->x)] = 0xffffffff;
-		}
-		if (p.x >= 0)
-			((t_ui *)(w3d->gui->pixels))[p.x + (p.y * w3d->gui->x)] = 0xff000000;
-	}
-}
-
 int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 {
 	t_v2f		*xv;
@@ -164,6 +128,7 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 		// w3d_drawcol(&(lay->level), &ctx, ray);
 	}
 	w3d_start_renderthreads(lay, w3d);
-	w3d_drawminimap(&(lay->level), w3d);
+	if (w3d->flags & W3D_MINIMAP)
+		w3d_drawminimap(&(lay->level), w3d);
 	return (0);
 }

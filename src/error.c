@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 16:39:15 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 05:36:55 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 22:18:59 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ static void	free_init_data(t_w3d *w3d, const char **msg)
 		*msg = "Failed to load texture";
 	if (!w3d->layers || (w3d->layers->layer.type == W3D_ERROR))
 		*msg = "Failed to load map";
-	w3dlvl_free(&(w3d->layers->level), w3d);
+	if (w3d->layers->layer.type != W3D_ERROR)
+		w3dlvl_free(&(w3d->layers->level), w3d);
 	if (w3d->layers)
 		free(w3d->layers);
 }

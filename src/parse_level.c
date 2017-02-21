@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 15:50:44 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 03:51:03 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 21:52:28 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,13 @@ static int		parse_init(t_w3d *w3d, t_pdata *dat, t_w3dmap *map)
 	int			ret;
 	char		cfg[256];
 
-	dat->c = dat->buf;
-	dat->cursor = 0;
-	dat->len[0] = 0;
 	if (((ret = (int)read(dat->fd, dat->buf, PBUFS)) < 5) ||
 		(ft_strncmp(dat->buf, "#map", 4)))
 		return (0);
 	dat->buf[ret] = '\0';
-	dat->buf[PBUFS] = '\0';
 	dat->buf[PBUFS + 1] = (ret < PBUFS) ? 0 : 1;
 	dat->blist[0] = ft_blstnew(sizeof(t_w3dmap), 8);
-	dat->blist[1] = NULL;
-	dat->blist[2] = NULL;
 	dat->data[0] = map;
-	dat->data[1] = NULL;
 	*map = w3d->default_cfg;
 	map->grid = NULL;
 	ret = 0;
@@ -67,7 +60,7 @@ static int		parse_loop(t_w3d *w3d, t_pdata *dat)
 	return (check);
 }
 
-static t_w3dmap	*create_layerdata(t_pdata *dat, int *len)
+static t_w3dmap	*create_layerdata(t_w3d *w3d, t_pdata *dat, int *len)
 {
 	t_blit		it;
 	t_w3dmap	*map;
@@ -88,6 +81,8 @@ static t_w3dmap	*create_layerdata(t_pdata *dat, int *len)
 	{
 		if (map->grid)
 			maps[i++] = *map;
+		else
+			w3d_rmlayout(w3d, map);
 	}
 	return (maps);
 }
@@ -116,7 +111,7 @@ t_w3dlvl		w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer)
 	t_pdata		dat;
 	t_w3dmap	map;
 
-	dat.error = 1;
+	w3dp_parsedat_init(&dat);
 	if (path && (path[0] == '@') && ft_filename_ext(w3d->paths.lvl_file,
 		path + 1, ".w3dl", w3d->paths.lvl_len))
 		path = w3d->paths.lvl_dir;
@@ -125,8 +120,10 @@ t_w3dlvl		w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer)
 	if ((dat.error = parse_init(w3d, &dat, &map)))
 	{
 		if ((dat.error = parse_loop(w3d, &dat)) && (layer.level.lvl_data =
-			create_layerdata(&dat, &(layer.level.level_num))))
+			create_layerdata(w3d, &dat, &(layer.level.level_num))))
 			setup_layer(&(layer.level));
+		if (!dat.ret[15])
+			w3d_rmlayout(w3d, &map);
 		ft_blstfree(&(dat.blist[0]));
 		ft_blstfree(&(dat.blist[1]));
 		ft_blstfree(&(dat.blist[2]));

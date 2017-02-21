@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 04:03:46 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/19 20:21:21 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 18:36:48 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int				w3dp_getbloc(t_blst *blocs, int id, t_w3dbox **bloc)
 		return (blid);
 	if (blid >= 1024)
 		return (-1);
-	ft_printf("New bloc - %i, %li\n", id, blocs->len);
 	nbloc = (t_w3dbox){ .flags = 0, .userid = id, .layer = 1, .color =
 		(t_rgba){0, 0, 0, 255}, .rtex = NULL, .gtex = NULL, .wtex = NULL};
 	ft_blststore(blocs, &nbloc);

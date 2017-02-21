@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 18:42:04 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 23:27:46 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 #include <stdlib.h>
 #include "wolf3d.h"
 #include "parser.h"
-
-// #include "testdata.c"
 
 static void		resize_callback(void *arg, int w, int h)
 {
@@ -59,7 +57,6 @@ static int		init_data(t_w3d *w3d)
 	w3d->paths.tex_len = CPL - 15;
 	w3d->default_cfg.bloclen = 0;
 	return (w3d_parse_cfg(w3d, "data/layouts/default.w3dc", &w3d->default_cfg));
-	// return (1);
 }
 
 static int		init_wolf3d_lvls(t_w3d *w3d, int ac, char **av)
@@ -82,6 +79,7 @@ static int		init_wolf3d_lvls(t_w3d *w3d, int ac, char **av)
 		return (0);
 	w3d->active_layers[0] = lay;
 	w3d->active_laynum = 1;
+	w3d->flags = W3D_MINIMAP;
 	return (1);
 }
 
@@ -109,7 +107,6 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 	if (!w3d->screen || !w3d_init_rdrdata(w3d))
 		return (-119);
 	w3d_update_rdrdata(w3d->render, w3d->screen->x, w3d->screen->y);
-	// init_testdata(w3d);
 	if (!init_wolf3d_lvls(w3d, ac, av))
 		return (-104);
 	return (0);
@@ -128,7 +125,6 @@ int				main(int argc, char **argv)
 	if ((error = init_wolf3d(&w3d, argc, argv)))
 		return (w3d_nicequit(&w3d, error));
 	ti = clock();
-	ft_printf("rand %i\n", rand());
 	i = 0;
 	while (mglwin_run(w3d.win))
 	{

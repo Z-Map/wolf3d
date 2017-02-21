@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 20:54:15 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 04:14:31 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 18:35:22 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,11 @@ int			w3dp_bloc_tex(const char *name, const char *val, void *arg)
 	c = ft_strchrnul(path, (*val == '"') ? '"' : ' ');
 	*c = '\0';
 	if (*name == 'w')
-		ft_printf("Try to load %s at %s %s\n", name, path,
-		((bloc->wtex = w3d_loadtex(w3d, path))) ? "ok" : "fail");
+		bloc->wtex = w3d_loadtex(w3d, path);
 	else if (*name == 'g')
-		ft_printf("Try to load %s at %s %s\n", name, path,
-		((bloc->gtex = w3d_loadtex(w3d, path))) ? "ok" : "fail");
+		bloc->gtex = w3d_loadtex(w3d, path);
 	else if (*name == 'r')
-		ft_printf("Try to load %s at %s %s\n", name, path,
-		((bloc->rtex = w3d_loadtex(w3d, path))) ? "ok" : "fail");
+		bloc->rtex = w3d_loadtex(w3d, path);
 	*c = (*val == '"') ? '"' : ' ';
 	return (1);
 }

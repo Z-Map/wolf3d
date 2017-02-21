@@ -6,38 +6,11 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 14:45:56 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/18 22:27:15 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 18:33:34 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
-int				w3dp_nextline(t_pdata *dat)
-{
-	size_t		l;
-	int			ret;
-	char		*le;
-
-	if ((ret = ft_stridx(dat->buf + dat->cursor, (int)'\n')) < 0)
-		return (-1);
-	dat->cursor += ret + 1;
-	dat->c = dat->buf + dat->cursor;
-	le = ft_strchr(dat->c, (int)'\n');
-	if (le)
-		return ((int)(le - dat->c));
-	l = ft_strlen(dat->c);
-	if (!dat->buf[PBUFS + 1])
-		return ((int)l);
-	dat->c = ft_memmove(dat->buf, dat->c, l + 1) + l;
-	l = PBUFS - l;
-	if ((ret = read(dat->fd, dat->c, l)) < (int)l)
-		dat->buf[PBUFS + 1] = 0;
-	dat->c[ret] = '\0';
-	le = ft_strchrnul(dat->c, (int)'\n');
-	dat->c = dat->buf;
-	dat->cursor = 0;
-	return (le - dat->c);
-}
 
 static int		parse_init(t_w3d *w3d, t_pdata *dat)
 {
@@ -77,10 +50,7 @@ static int		parse_loop(t_pdata *dat)
 		if (dat->c[0] == '[')
 		{
 			if (!ft_sscanf(dat->c, "[%*s %i]", &bid))
-			{
-				ft_printf("call find_blocid on \"%s\"\n", dat->c);
 				bid = w3dp_find_blocid(dat->blist[0]);
-			}
 			if (w3dp_getbloc(dat->blist[0], bid, &bloc) < 0)
 				return (0);
 		}
@@ -96,9 +66,7 @@ int				w3d_parse_cfg(t_w3d *w3d, const char *path, t_w3dmap *map)
 	t_pdata		dat;
 	t_w3dbox	*cfg;
 
-	dat.buf[PBUFS] = '\0';
-	dat.cursor = 0;
-	ft_printf("try to parsecfg %s\n", path);
+	w3dp_parsedat_init(&dat);
 	if (path && (path[0] == '@') && ft_filename_ext(w3d->paths.cfg_file,
 		path + 1, ".w3dc", w3d->paths.cfg_len))
 		path = w3d->paths.cfg_dir;
