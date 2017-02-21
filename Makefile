@@ -6,7 +6,7 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2017/02/20 04:59:26 by qloubier         ###   ########.fr        #
+#    Updated: 2017/02/21 23:41:40 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ SILENT		= @
 BUILDDIR	= build
 SRCDIR		= src
 SRCS		= main.c\
+			time.c\
 			draw.c\
 			draw_level.c\
 			draw_thread.c\

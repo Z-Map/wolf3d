@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 17:31:47 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 23:40:06 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,8 @@ struct			s_wolf3d_main
 	t_cfg		paths;
 	t_w3dmap	default_cfg;
 };
+
+void			w3d_frametime(void );
 
 t_ui			w3d_getpx(mglimg *img, int x, int y);
 void			w3d_setpx(mglimg *img, int x, int y, t_ui col);

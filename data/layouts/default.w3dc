@@ -16,18 +16,35 @@ type = wall|physic
 
 [wallyellow 3]
 color = rgb(233, 195, 31)
-layer = 3
+layer = 4
 type = wall|physic
 
 [wallblue 4]
 color = rgb(11, 73, 99)
-layer = 3
+layer = 5
 type = wall|physic
 
 [wallpink 5]
 color = rgb(176, 24, 97)
-layer = 3
+layer = 6
 type = wall|physic
+
+[wallpink 6]
+color = rgb(187, 11, 11)
+layer = 7
+type = wall|physic
+
+[wallpink 7]
+color = rgb(43, 153, 120)
+layer = 1|5
+
+[wallpink 8]
+color = rgb(153, 145, 43)
+layer = 1|5|4
+
+[wallpink 9]
+color = rgb(105, 43, 153)
+layer = 1|5|4|3
 
 [playerstart 80]
 color = rgb(0, 144, 153)

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 23:27:46 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 23:41:02 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,19 +115,14 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 int				main(int argc, char **argv)
 {
 	t_w3d				w3d;
-	struct timespec		t = (struct timespec){0, 12000000L};
-	clock_t				ti;
-	double				timer;
-	double				avg;
-	int					error, i;
+	int					error;
 
 	srand(time(NULL));
 	if ((error = init_wolf3d(&w3d, argc, argv)))
 		return (w3d_nicequit(&w3d, error));
-	ti = clock();
-	i = 0;
 	while (mglwin_run(w3d.win))
 	{
+		w3d_frametime();
 		if (w3d.flags & W3D_WIN)
 			mglw_draw_itow(w3d.win, w3d.winimg, 0, 0);
 		else
@@ -136,27 +131,6 @@ int				main(int argc, char **argv)
 			w3dlvl_mainloop((t_w3dlvl *)(&(w3d.layers[0].level)), &w3d);
 			mglw_draw_itow(w3d.win, w3d.screen, 0, 0);
 		}
-		ti = clock() - ti;
-		timer = (double)ti / CLOCKS_PER_SEC;
-		avg += timer;
-		timer = (1.0 / 60.0) - timer;
-		ti = clock();
-		if (timer > 0.0)
-		{
-			t.tv_nsec = (long)(timer * 999999989L);
-			// ft_printf("Sleep : % 6.4F Mx FPS : % 6.4F\e[40D", timer,
-			// 	1.0 / ((1.0 / 60.0) - timer));
-			nanosleep(&t, NULL);
-		}
-		if (i++ >= 60)
-		{
-			avg /= 60.0;
-			ft_printf("Mx FPS :%7.2F Average FPS :%7.2F\e[36D",
-				1.0 / ((1.0 / 60.0) - timer), 1.0 / avg);
-			avg = 0.0;
-			i = 0;
-		}
-		// ft_printf("Mx FPS :% 4.2F\e[15D", 1.0 / ((1.0 / 60.0) - timer));
 	}
 	return (w3d_nicequit(&w3d, 0));
 }
