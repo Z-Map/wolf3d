@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 15:50:44 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/19 04:17:28 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/21 03:51:03 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,6 @@ static int		parse_init(t_w3d *w3d, t_pdata *dat, t_w3dmap *map)
 		dat->ret[15] = 0;
 	else
 		map->flags = W3D_MAP_STATIC;
-	// dat->data[1] = ft_blststore(dat->blist[0], map);
-	// ft_printf("Coucou ! %lu %lu\n", *((t_ui *)map));
-	// ft_printf("Coucou !%u\n", map->bloclen);
 	return (1);
 }
 

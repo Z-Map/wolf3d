@@ -12,6 +12,12 @@ layer = 2
 type = wall|physic
 wtex = "@walltex.png"
 
+[wall 71]
+color = rgb(122, 122, 122)
+layer = 1
+gtex = "@wallstone.png"
+rtex = "@woodroof.png"
+
 [wallgreen 2]
 color = rgb(32, 46, 19)
 layer = 3
@@ -36,11 +42,31 @@ layer = 2
 type = wall|physic
 wtex = "@wallwin.png"
 
-[walldoor 66]
+[wallwindow 119]
+color = rgb(64, 64, 74)
+layer = 2
+type = wall|physic
+wtex = "@wallwindow.png"
+
+[activator 65]
+color = rgb(202, 118, 58)
+layer = 1|4
+gtex = "@woodfloor_button.png"
+rtex = "@woodroof.png"
+
+[wallbanner 66]
 color = rgb(64, 64, 74)
 layer = 2
 type = wall|physic
 wtex = "@wallbanner.png"
+
+[wallbanner 89]
+color = rgb(64, 64, 74)
+layer = 4
+type = wall|physic
+wtex = "@wallbannereye.png"
+rtex = "@wallstone.png"
+gtex = "@wallstone.png"
 
 [wallkey 75]
 color = rgb(252, 167, 0)
