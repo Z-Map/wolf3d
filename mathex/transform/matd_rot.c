@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 14:27:24 by qloubier          #+#    #+#             */
-/*   Updated: 2016/11/25 05:03:10 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 15:20:35 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ t_mattd				nmattd_rot(t_v3d vrad)
 {
 	const t_v3d		c = (t_v3d){cos(vrad.x), cos(vrad.y), cos(vrad.z)};
 	const t_v3d		s = (t_v3d){sin(vrad.x), sin(vrad.y), sin(vrad.z)};
-	const double		sxsz = s.x * s.z;
-	const double		sycz = s.y * c.z;
+	const double	sxsz = s.x * s.z;
+	const double	sycz = s.y * c.z;
 
 	return ((t_mattd){
 		(t_v3d){ (c.y * c.z) - (s.y * sxsz), -s.z * c.x, sycz + (c.y * sxsz)},

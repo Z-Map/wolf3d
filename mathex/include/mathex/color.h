@@ -6,12 +6,12 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 18:09:51 by qloubier          #+#    #+#             */
-/*   Updated: 2017/01/06 18:10:23 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 15:23:23 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COLOR_H
-#define COLOR_H
+# define COLOR_H
 
 # include "mathex/fixedfloat.h"
 

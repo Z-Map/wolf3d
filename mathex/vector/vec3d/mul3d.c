@@ -14,7 +14,7 @@
 
 t_v3d					v3dmulv3i(t_v3d a, t_v3i b)
 {
-	return((t_v3d){ a.x * (double)(b.x),
+	return ((t_v3d){ a.x * (double)(b.x),
 		a.y * (double)(b.y),
 		a.z * (double)(b.z)});
 }
@@ -24,12 +24,12 @@ t_v3d					*pv3dmulv3i(t_v3d *a, const t_v3i *b)
 	a->x *= (double)(b->x);
 	a->y *= (double)(b->y);
 	a->z *= (double)(b->z);
-	return(a);
+	return (a);
 }
 
 t_v3d					v3dmulv3d(t_v3d a, t_v3d b)
 {
-	return((t_v3d){ a.x * (double)(b.x),
+	return ((t_v3d){ a.x * (double)(b.x),
 		a.y * (double)(b.y),
 		a.z * (double)(b.z)});
 }
@@ -39,5 +39,5 @@ t_v3d					*pv3dmulv3d(t_v3d *a, const t_v3d *b)
 	a->x *= b->x;
 	a->y *= b->y;
 	a->z *= b->z;
-	return(a);
+	return (a);
 }

@@ -14,24 +14,24 @@
 
 t_v2i					v2isubv2i(t_v2i a, t_v2i b)
 {
-	return((t_v2i){ a.x - b.x, a.y - b.y });
+	return ((t_v2i){ a.x - b.x, a.y - b.y });
 }
 
 t_v2i					*pv2isubv2i(t_v2i *a, const t_v2i *b)
 {
 	a->x -= b->x;
 	a->y -= b->y;
-	return(a);
+	return (a);
 }
 
 t_v2i					v2isubv2f(t_v2i a, t_v2f b)
 {
-	return((t_v2i){ a.x - (int)b.x, a.y - (int)b.y });
+	return ((t_v2i){ a.x - (int)b.x, a.y - (int)b.y });
 }
 
 t_v2i					*pv2isubv2f(t_v2i *a, const t_v2f *b)
 {
 	a->x -= (int)b->x;
 	a->y -= (int)b->y;
-	return(a);
+	return (a);
 }
