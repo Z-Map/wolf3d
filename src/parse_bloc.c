@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 20:54:15 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/22 13:06:36 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 18:51:14 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int			w3dp_bloc_type(const char *name, const char *val, void *arg)
 
 	bloc = (t_w3dbox *)arg;
 	(void)name;
+	bloc->flags = 0;
 	while (*val)
 	{
 		val += bloc_type_parse(val, bloc);

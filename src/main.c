@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/22 12:59:19 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 17:47:12 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static int		init_wolf3d_lvls(t_w3d *w3d, int ac, char **av)
 	if (!(w3d->openimg = w3d_loadtex(w3d, "@gui/exit_open.png"))
 		|| !(w3d->winimg = w3d_loadtex(w3d, "@gui/win.png"))
 		|| !(w3d->helpimg = w3d_loadtex(w3d, "@gui/found_key_msg.png"))
+		|| !(w3d->skyimg = w3d_loadtex(w3d, "@sky.jpg"))
 		|| !(lay = malloc(sizeof(t_w3dl))))
 		return (0);
 	w3d_drawimg(w3d, 10, -10, w3d->helpimg);
@@ -124,6 +125,7 @@ int				main(int argc, char **argv)
 			mglw_draw_itow(w3d.win, w3d.winimg, 0, 0);
 		else
 		{
+			mglw_draw_itow(w3d.win, w3d.skyimg, 0, 0);
 			w3d_layer_draw(&w3d);
 			w3dlvl_mainloop((t_w3dlvl *)(&(w3d.layers[0].level)), &w3d);
 			mglw_draw_itow(w3d.win, w3d.screen, 0, 0);

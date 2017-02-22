@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/22 13:04:04 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 18:00:06 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ float			w3d_drawplane(t_w3d *w3d, t_w3dlvl *lvl, t_v2i *px, t_v2f l)
 	idx = (t_v2i){(int)pos.x, (int)pos.y};
 	if ((!idx.x && (pos.x < 0.0)) || (!idx.y && (pos.y < 0.0)) ||
 		!(bloc = w3dlvl_getbox_vi(&(lvl->lvl_data[lvl->active_lvl]), idx, 0)))
-		((t_ui *)w3d->screen->pixels)[i] = 0xff000000;
+		((t_ui *)w3d->screen->pixels)[i] = 0x0;
 	else if (((dist < 0.0) && bloc->gtex) || ((dist >= 0.0) && bloc->rtex))
 		((t_ui *)w3d->screen->pixels)[i] = w3d_drawshade(get_texpx(
 				(t_v2f){mxabsf(pos.x) + 1.0f, 0.0f}, mxfracf(0.5f *
@@ -61,7 +61,7 @@ float			w3d_drawwall(mglimg *scr, t_v2i *px, int height, t_ray *ray)
 	pxs = (t_ui *)scr->pixels;
 	if (!ray->bloc)
 		while (height-- && (px->y >= 0))
-			pxs[px->x + px->y-- * scr->x] = 0xff000000;
+			pxs[px->x + px->y-- * scr->x] = 0x0;
 	else if ((ray->bloc) && (ray->bloc->wtex))
 		while (height-- && (px->y >= 0))
 			pxs[px->x + px->y-- * scr->x] = w3d_drawshade(get_texpx(ray->end,

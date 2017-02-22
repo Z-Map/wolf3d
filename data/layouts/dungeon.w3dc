@@ -6,11 +6,24 @@ layer = 1
 gtex = "@woodfloorv2.png"
 rtex = "@woodroof.png"
 
+[ground 6]
+color = rgb(202, 118, 58)
+layer = 1
+type = 0
+gtex = "@woodfloorv2.png"
+rtex = "@transparent.png"
+
 [wall 1]
 color = rgb(64, 64, 74)
 layer = 2
 type = wall|physic
 wtex = "@walltex.png"
+
+[wall 5]
+color = rgb(64, 64, 74)
+layer = 2
+type = wall|physic
+wtex = "@walltex_open.png"
 
 [wall 71]
 color = rgb(122, 122, 122)

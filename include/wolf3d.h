@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 23:40:06 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 17:46:03 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,6 +292,7 @@ struct			s_wolf3d_main
 	mglimg		*winimg;
 	mglimg		*openimg;
 	mglimg		*helpimg;
+	mglimg		*skyimg;
 	t_w3drdr	render;
 	int			laynum;
 	int			active_laynum;
