@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 22:43:06 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 22:33:44 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:11:02 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,7 @@ static int		add_value(int id, int num, t_pdata *dat)
 {
 	t_w3dmb		bloc;
 
-	// ft_printf("add %i bloc with id : %i - ", num, id);
 	id = w3d_getblocfromid((t_w3dmap *)(dat->data[1]), id);
-	// ft_printf("found id : %i \n", id);
 	bloc = (t_w3dmb){.id = id, .flags = 0, .sub_data = NULL};
 	while (num-- && ft_blststore(dat->blist[1], &bloc))
 		(dat->len[1])++;

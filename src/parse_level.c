@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 15:50:44 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 21:52:28 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:10:40 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,9 @@ t_w3dlvl		w3d_parse_lvl(t_w3d *w3d, const char *path, t_w3dl layer)
 		return (layer.level);
 	if ((dat.error = parse_init(w3d, &dat, &map)))
 	{
-		if ((dat.error = parse_loop(w3d, &dat)) && (layer.level.lvl_data =
-			create_layerdata(w3d, &dat, &(layer.level.level_num))))
+		if ((dat.error = parse_loop(w3d, &dat)) &&
+			(layer.level.lvl_data = create_layerdata(w3d,
+				&dat, &(layer.level.level_num))))
 			setup_layer(&(layer.level));
 		if (!dat.ret[15])
 			w3d_rmlayout(w3d, &map);

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/10 13:02:18 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 01:38:00 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:06:58 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int		get_val(const char **c)
 		ft_buftof(c, 20, g_cmapup[8]);
 	else
 		ret = ft_buftoi(c, 20, g_cmapup[8]);
-	if(**c == ',')
+	if (**c == ',')
 		(*c)++;
 	*c = ft_strpskp(*c, FT_WHITESPACE);
 	return (ret);

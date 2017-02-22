@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/27 20:08:57 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/19 04:49:54 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:16:17 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ t_ul			w3d_raystart(t_w3dmap *map, t_ray *ray, t_v3f *pos, t_v2i *idx)
 		return (1);
 	return (bloc->layer);
 }
-
 
 t_ray			w3d_rayend(t_ray ray, t_v2i *idx, t_w3dbox *bloc, float dist)
 {

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 17:43:05 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/15 13:09:15 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:14:02 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int				w3d_init_rdrdata(t_w3d *w3d)
 	w3d->render.fov = (t_v2f){0.8f * w3d->render.ratio.y, 1.047197551f};
 	if (!w3d->render.rays || !w3d->render.wdist || !w3d->render.hdist)
 		return (0);
-	return(1);
+	return (1);
 }
 
 void			w3d_update_rdrdata(t_w3drdr rdr, int w, int h)

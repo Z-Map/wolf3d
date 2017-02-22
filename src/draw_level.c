@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 17:18:53 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:04:04 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ float			w3d_drawplane(t_w3d *w3d, t_w3dlvl *lvl, t_v2i *px, t_v2f l)
 	int			i;
 
 	i = px->x + px->y * w3d->screen->x;
-	dist =  mxabsf(w3d->render.hdist[px->y]) / w3d->render.wdist[px->x].x;
+	dist = mxabsf(w3d->render.hdist[px->y]) / w3d->render.wdist[px->x].x;
 	pos.x = lvl->player.position.x + (dist * l.x);
 	pos.y = lvl->player.position.y + (dist * l.y);
 	dist = w3d->render.hdist[px->y];
@@ -106,9 +106,6 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 	t_v2f		start;
 	t_v2f		look;
 	int			x;
-	// test var
-	// t_ray		*ray;
-	// t_w3dthr	ctx;
 
 	xv = w3d->render.wdist;
 	w3d_update_player(w3d, &(lay->level));
@@ -120,12 +117,6 @@ int				w3d_draw_lvl(t_w3dl *lay, t_w3d *w3d)
 		w3d->render.rays[x] = w3d_mkray(start,
 			(t_v2f){look.x * xv[x].x + xv[x].y * look.y,
 			-look.x * xv[x].y + look.y * xv[x].x}, 0, -1.0f);
-		// Test part
-		// ctx = (t_w3dthr){ .x = x, .xfix = xv[x].x, .w3d = w3d, .lay = lay};
-		// ray = &(w3d->render.rays[x]);
-		// w3d_raycast(lay->level.lvl_data, ray);
-		// ray->distance *= xv[x].x;
-		// w3d_drawcol(&(lay->level), &ctx, ray);
 	}
 	w3d_start_renderthreads(lay, w3d);
 	if (w3d->flags & W3D_MINIMAP)

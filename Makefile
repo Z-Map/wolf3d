@@ -6,14 +6,14 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2017/02/21 23:41:40 by qloubier         ###   ########.fr        #
+#    Updated: 2017/02/22 12:41:55 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 OPSYS		= $(shell uname -s)
 NAME		= wolf3d
 PROJECTNAME	= wolf3d
-LIBS		= ../libft/libft.a mathex/libmathex.a ../mglw/libmglw.a
+LIBS		= libft/libft.a mathex/libmathex.a mglw/libmglw.a
 LIBFLAGS	= -lm
 INCDIR		= -Iinclude
 CFLAGS		= -Wall -Wextra -Werror

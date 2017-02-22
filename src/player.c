@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 14:49:04 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 17:22:38 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:13:41 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_v3f		w3d_getphymov(t_w3dlvl *lvl, t_w3dpc pc)
 	map = &(lvl->lvl_data[lvl->active_lvl]);
 	mv = pc.movement;
 	mv = (t_v3f){mv.x * look.x + mv.y * look.y,
-		- mv.y * look.x + mv.x * look.y, 0.0f};
+		-mv.y * look.x + mv.x * look.y, 0.0f};
 	mv.z = mv.x;
 	ray = w3d_mkray((t_v2f){pc.position.x, pc.position.y + mv.y},
 		(t_v2f){(mv.x > 0.0f) ? 1.0f : -1.0f, 0.0f},

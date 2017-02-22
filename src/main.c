@@ -6,12 +6,10 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 23:41:02 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 12:59:19 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <time.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include "wolf3d.h"
 #include "parser.h"
@@ -93,8 +91,7 @@ static int		init_wolf3d(t_w3d *w3d, int ac, char **av)
 	if (!init_data(w3d) || !mglw_init())
 		return (-121);
 	if ((!(w3d->win = mglw_openwin(
-			mglw_mkwin(MGLW_LEGACY_MODE,
-				MGLW_2DLAYER), //| MGLW_FULLSCREEN | MGLW_FULLRES),
+			mglw_mkwin(MGLW_LEGACY_MODE, MGLW_2DLAYER),
 			1400, 900, "~*( Wolf3D )*~"))))
 		return (-120);
 	mglw_setsetting(MGLWS_EXITKEY, MGLW_KEY_ESCAPE);

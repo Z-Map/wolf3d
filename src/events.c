@@ -6,13 +6,13 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 13:55:55 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 17:14:53 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:04:47 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void		w3d_layer_evt_process(t_w3d *w3d, t_w3devt evt, int flag)
+void			w3d_layer_evt_process(t_w3d *w3d, t_w3devt evt, int flag)
 {
 	t_w3dl		*lay;
 	int			i;
@@ -25,7 +25,7 @@ void		w3d_layer_evt_process(t_w3d *w3d, t_w3devt evt, int flag)
 		lay = w3d->active_layers[i];
 }
 
-int			w3d_keypress(void *root, int k)
+int				w3d_keypress(void *root, int k)
 {
 	t_w3d		*w3d;
 	t_w3devt	evt;
@@ -39,7 +39,7 @@ int			w3d_keypress(void *root, int k)
 	return (0);
 }
 
-int		w3d_keyrepeate(void *root, int k)
+int				w3d_keyrepeate(void *root, int k)
 {
 	t_w3d		*w3d;
 	t_w3devt	evt;
@@ -50,7 +50,7 @@ int		w3d_keyrepeate(void *root, int k)
 	return (0);
 }
 
-int		w3d_keyrelease(void *root, int k)
+int				w3d_keyrelease(void *root, int k)
 {
 	t_w3d		*w3d;
 	t_w3devt	evt;

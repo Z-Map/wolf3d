@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/10 14:53:51 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 18:35:32 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:15:05 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ mglimg			*w3d_loadtex(t_w3d *w3d, const char *path)
 	if ((path[0] == '@') && ft_filename_ext(w3d->paths.tex_file,
 		path + 1, NULL, w3d->paths.tex_len))
 		path = w3d->paths.tex_dir;
-	// ft_printf("tex path : %s\n", path);
 	if ((tex.next = get_texfromlist(w3d, path)))
 		return (tex.next->img);
 	if (!(tex.img = mglw_loadimage(path, 0, 4)))

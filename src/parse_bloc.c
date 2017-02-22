@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 20:54:15 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 18:35:22 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:06:36 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	bloc_type_parse(const char *val, t_w3dbox *bloc)
 
 	if (!ft_strncmp(val, "wall", 4) && (ret = 4))
 		bloc->flags |= W3D_BLOC_WALL;
-	if (!ft_strncmp(val, "physic", 6) && (ret =6))
+	if (!ft_strncmp(val, "physic", 6) && (ret = 6))
 		bloc->flags |= W3D_BLOC_COLLIDER;
 	if (!ft_strncmp(val, "actor", 5) && (ret = 5))
 		bloc->flags |= W3D_BLOC_ACTIVATOR;
@@ -44,14 +44,14 @@ static int	bloc_type_parse(const char *val, t_w3dbox *bloc)
 int			w3dp_bloc_type(const char *name, const char *val, void *arg)
 {
 	t_w3dbox		*bloc;
-	bloc = (t_w3dbox *)arg;
 
+	bloc = (t_w3dbox *)arg;
 	(void)name;
 	while (*val)
 	{
 		val += bloc_type_parse(val, bloc);
 		if (*val != '|')
-			break;
+			break ;
 		while (*val == '|')
 			val++;
 	}
@@ -60,7 +60,7 @@ int			w3dp_bloc_type(const char *name, const char *val, void *arg)
 
 int			w3dp_bloc_layer(const char *name, const char *val, void *arg)
 {
-	int		ret;
+	int				ret;
 	t_w3dbox		*bloc;
 
 	bloc = (t_w3dbox *)arg;
@@ -71,7 +71,7 @@ int			w3dp_bloc_layer(const char *name, const char *val, void *arg)
 		if ((ret = (int)ft_buftoui(&val, 3, g_cmapup[8])) <= 64 && ret)
 			bloc->layer |= 1 << (ret - 1);
 		if (*val != '|')
-			break;
+			break ;
 		while (*val == '|')
 			val++;
 	}

@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/25 14:20:09 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 05:00:02 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:05:14 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void			w3d_drawimg(t_w3d *w3d, int x, int y, mglimg *img)
 	t_v3i		t;
 	t_v2i		p;
 
-	t = (t_v3i){img->x , img->y, img->x};
+	t = (t_v3i){img->x, img->y, img->x};
 	x += (x < 0) ? w3d->gui->x : img->x;
 	y += (y < 0) ? w3d->gui->y : img->y;
 	if (x > (int)w3d->gui->x)

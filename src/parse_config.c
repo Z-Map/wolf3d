@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/03 14:45:56 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/21 18:33:34 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/22 13:09:26 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static int		parse_init(t_w3d *w3d, t_pdata *dat)
 		ft_blststore(dat->blist[0], &(w3d->default_cfg.blocs[ret++]));
 	return (1);
 }
-
 
 static int		parse_loop(t_pdata *dat)
 {
