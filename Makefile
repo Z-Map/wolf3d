@@ -6,7 +6,7 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/12/23 00:32:16 by qloubier          #+#    #+#              #
-#    Updated: 2017/02/22 12:41:55 by qloubier         ###   ########.fr        #
+#    Updated: 2017/02/22 16:06:09 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,7 +80,7 @@ OSXLIBS		= -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVi
 all: $(NAME)
 
 $(LIBS):
-	$(SILENT)$(MAKE) -C $(shell dirname $@)
+	$(SILENT)$(MAKE) -C $(shell dirname $@) BUILDDIR=$(CURDIR)/$(BUILDDIR) config=$(config)
 
 $(BUILDDIR):
 	$(SILENT)mkdir -p $(BUILDDIR)
@@ -112,9 +112,13 @@ endif
 clean:
 	@printf "\e[31mCleaning compile files ...\e(B\e[m\n"
 	$(SILENT)rm -f $(INTERN_OBJ) $(INTERN_DEP)
+	$(SILENT)$(MAKE) -C mathex clean
+	$(SILENT)$(MAKE) -C libft clean
+	$(SILENT)$(MAKE) -C mglw clean BUILDDIR=$(CURDIR)/$(BUILDDIR)
 
 fclean: clean
 	@printf "\e[31mCleaning $(NAME) ...\e(B\e[m\n"
 	$(SILENT)rm -f $(NAME)
+	$(SILENT)rm -f $(LIBS)
 
 re: fclean all

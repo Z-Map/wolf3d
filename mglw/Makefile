@@ -6,7 +6,7 @@
 #    By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/03/03 18:39:00 by qloubier          #+#    #+#              #
-#    Updated: 2017/02/22 14:24:40 by qloubier         ###   ########.fr        #
+#    Updated: 2017/02/22 16:10:59 by qloubier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,12 +85,12 @@ endif
 
 all: $(NAME)
 
-include/mglw_keys.h: glfw/include/GLFW/glfw3.h Makefile
+include/mglw_keys.h: glfw/include/GLFW/glfw3.h
 	printf "#ifndef MGLW_KEYS_H\n# define MGLW_KEYS_H\n\n" > include/mglw_keys.h
 	cat glfw/include/GLFW/glfw3.h | grep "#define GLFW_KEY" | sed "s/GLFW/MGLW/" >> include/mglw_keys.h
 	printf "\n#endif\n" >> include/mglw_keys.h
 
-$(INTERN_SHA): %.h: % Makefile
+$(INTERN_SHA): %.h: %
 	@printf "\e[33mShader $<\e[31m\e[80D"
 	$(SILENT)printf "(const char[]){" > $@
 	$(SILENT)xxd -i $< | grep -x "[0-9a-fx, ]*" $(INTERN_SHADERCOMAND) >> $@
@@ -100,22 +100,18 @@ $(INTERN_SHA): %.h: % Makefile
 $(BUILDDIR):
 	$(SILENT)mkdir -p $(BUILDDIR)
 
-$(BUILDDIR)/Makefile:
-	$(SILENT)cd build && cmake ../$(LIBDIR)/glfw
-
-$(BUILDDIR)/libglfw3.a: #$(BUILDDIR)/Makefile
-	$(SILENT)$(MAKE) -s -C $(LIBDIR)/glfw  TARGETDIR=$(CURDIR)/$(BUILDDIR) BUILDDIR=$(CURDIR)/$(BUILDDIR) config=$(config)
+$(BUILDDIR)/libglfw3.a:
+	$(SILENT)$(MAKE) -s -C $(LIBDIR)/glfw TARGETDIR=$(BUILDDIR) BUILDDIR=$(BUILDDIR) config=$(config)
 
 $(GLLOAD_OBJ):
-	$(SILENT)$(MAKE) -s -C $(LIBDIR)/glload $(CURDIR)/$@ BUILDDIR=$(CURDIR)/$(BUILDDIR) config=$(config)
+	$(SILENT)$(MAKE) -s -C $(LIBDIR)/glload $@ BUILDDIR=$(BUILDDIR) config=$(config)
 
-$(NAME): $(BUILDDIR) $(INTERN_SHA) $(BUILDDIR)/libglfw3.a $(INTERN_OBJ) $(GLLOAD_OBJ) Makefile
+$(NAME): $(BUILDDIR) $(INTERN_SHA) $(BUILDDIR)/libglfw3.a $(INTERN_OBJ) $(GLLOAD_OBJ)
 ifeq ($(BOBJ_GUARD),off)
 	$(SILENT)$(MAKE) -s $(NAME) BOBJ_GUARD=on
 else
-	$(SILENT)cp $(BUILDDIR)/libglfw3.a ./$(NAME)
+	$(SILENT)cp $(BUILDDIR)/libglfw3.a $(NAME)
 	$(SILENT)ar -rcs $(NAME) $(ALLOBJ) $(GLLOAD_OBJ)
-	# $(SILENT)sed "s/-lglfw3/-l$(LINKNAME)/" $(BUILDDIR)/glfw3.pc > ./$(LINKNAME).pc
 	@printf "\e[m[\e[32mok\e[m] \e[35m$@\e[m compiled !\e(B\e[m\n"
 endif
 
@@ -132,10 +128,11 @@ endif
 
 libclean:
 	@printf "\e[31mCleaning lib files ...\e(B\e[m\n"
-	$(SILENT)rm -rf $(BUILDDIR)/src/libglfw3.a
-	$(SILENT)rm -rf $(BUILDDIR)/libglload.a $(BUILDDIR)/gl_load*.o $(BUILDDIR)/glx_load*.o
+	$(SILENT)rm -rf $(BUILDDIR)/libglfw3.a
+	$(SILENT)rm -rf $(BUILDDIR)/libglload.a $(BUILDDIR)/gl_load*.[od] $(BUILDDIR)/glx_load*.[od]
+	$(SILENT)$(MAKE) -s -C $(LIBDIR)/glfw clean BUILDDIR=$(BUILDDIR)
 
-clean:
+clean: libclean
 	@printf "\e[31mCleaning compile files ...\e(B\e[m\n"
 	$(SILENT)rm -f $(INTERN_OBJ) $(INTERN_DEP)
 
