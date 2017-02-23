@@ -18,6 +18,7 @@ type = wall|physic
 color = rgb(233, 195, 31)
 layer = 4
 type = wall|physic
+wtex = "@hly.png""
 
 [wallblue 4]
 color = rgb(11, 73, 99)

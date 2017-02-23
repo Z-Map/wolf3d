@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 01:32:53 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/22 17:47:12 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/23 20:17:57 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static int		init_wolf3d_lvls(t_w3d *w3d, int ac, char **av)
 {
 	t_w3dl		*lay;
 
+	w3d->winkey = 0;
 	ft_bzero(w3d->gui->pixels, w3d->gui->memlen);
 	if (!(w3d->openimg = w3d_loadtex(w3d, "@gui/exit_open.png"))
 		|| !(w3d->winimg = w3d_loadtex(w3d, "@gui/win.png"))
