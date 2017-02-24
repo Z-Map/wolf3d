@@ -6,7 +6,7 @@
 /*   By: map <map@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/08 19:03:59 by map               #+#    #+#             */
-/*   Updated: 2016/11/23 01:21:08 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/24 16:20:08 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void		init_scanf(t_sfb *buf, const char *str, const char *fstr)
 	buf->ref = fstr;
 }
 
-int			ft_sscanf(const char *str, const char *fstr, ...)
+int				ft_sscanf(const char *str, const char *fstr, ...)
 {
 	t_sfb		buf;
 

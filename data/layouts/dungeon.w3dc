@@ -100,3 +100,10 @@ rtex = "@woodroof_start.png"
 [playerend 36]
 gtex = "@woodfloor_start.png"
 rtex = "@woodroof_start.png"
+
+[playerend 69]
+color = rgb(9, 191, 0)
+layer = 1
+type = exit
+gtex = "@woodfloor_end.png"
+rtex = "@woodroof.png"

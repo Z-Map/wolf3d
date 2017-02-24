@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/22 02:37:49 by qloubier          #+#    #+#             */
-/*   Updated: 2016/11/15 18:59:56 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/24 16:20:27 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void			init_dprintf(t_pfb *buf)
 	(buf->c)[FT_PF_BUFSIZE] = '\0';
 }
 
-int				ft_dprintf(int fd, const char *fstr, ...)
+int					ft_dprintf(int fd, const char *fstr, ...)
 {
 	t_pfb		buf;
 
