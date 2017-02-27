@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/23 14:54:16 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/23 20:12:28 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/02/27 19:25:06 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,12 @@
 
 # define BUFF_SIZE 0x1000
 # include "libft.h"
-#include <math.h>
+# include <math.h>
 # include "mglw/mglw.h"
 # include "mathex/vector.h"
 # include "mathex/utils.h"
 
-typedef struct s_octree_node		t_oxn;
-typedef struct s_ray				t_ray;
-
-typedef struct s_wolf3d_main		t_w3d;
-typedef struct s_wolf3d_lvlrender	t_w3drdr;
-typedef struct s_wolf3d_threadrdr	t_w3dthr;
-typedef struct s_wolf3d_event		t_w3devt;
-typedef struct s_wolf3d_player		t_w3dpc;
-typedef struct s_wolf3d_box			t_w3dbox;
-typedef struct s_wolf3d_map			t_w3dmap;
-typedef struct s_wolf3d_mapbloc		t_w3dmb;
-typedef struct s_texture			t_w3dtex;
-
-typedef union u_wolf3d_layers		t_w3dl;
-typedef struct s_wolf3d_layer		t_w3dlay;
-typedef struct s_wolf3d_basic_lvl	t_w3dlvl;
-typedef struct s_wolf3d_gui_page	t_w3dgp;
-typedef struct s_wolf3d_gui_element	t_w3dge;
-typedef struct s_wolf3d_menu		t_w3dgui;
+# include "wolfproto.h"
 
 struct			s_octree_node
 {
@@ -246,7 +228,7 @@ typedef struct	s_cbuffer
 	char		*b;
 }				t_str;
 
-struct	s_texture
+struct			s_texture
 {
 	t_w3dtex	*next;
 	int			flags;
@@ -306,7 +288,7 @@ struct			s_wolf3d_main
 	t_w3dmap	default_cfg;
 };
 
-void			w3d_frametime(void );
+void			w3d_frametime(void);
 
 t_ui			w3d_getpx(mglimg *img, int x, int y);
 void			w3d_setpx(mglimg *img, int x, int y, t_ui col);
