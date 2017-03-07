@@ -6,16 +6,16 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/09 04:01:53 by qloubier          #+#    #+#             */
-/*   Updated: 2016/02/21 03:45:24 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/03/07 15:49:09 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FLOAT_H
 # define FLOAT_H
 
-# define FIF_SIZE sizeof(int) * 8
+# define FIF_SIZE		(sizeof(int) * 8)
 # ifndef FIF_PRECISION
-#  define FIF_PRECISION 0
+#  define FIF_PRECISION	0
 # endif
 
 /*
@@ -24,11 +24,11 @@
 **
 */
 
-# define LOW_SIZE FIF_SIZE / 4
-# define MID_SIZE FIF_SIZE / 2
-# define HIGH_SIZE 3 * LOW_SIZE
+# define LOW_SIZE		(FIF_SIZE / 4)
+# define MID_SIZE		(FIF_SIZE / 2)
+# define HIGH_SIZE		(3 * LOW_SIZE)
 
-# define NOR_SIZE FIF_SIZE - 2
+# define NOR_SIZE		(FIF_SIZE - 2)
 
 typedef struct					s_fixed_low
 {
@@ -65,10 +65,10 @@ typedef struct s_fixed_high		t_fix;
 #  define FIF_INTSHIFT HIGH_SIZE
 # endif
 
-# define FIF_ROUNDMASK 1 << (FIF_INTSHIFT - 1)
-# define FIF_MIN (float)(1.0f / FIF_INTSHIFT)
-# define FIF_FRACPOW 0xffffffff >> (FIF_SIZE - FIF_INTSHIFT)
-# define FIF_INTMASK 0xffffffff ^ FIF_FRACPOW
+# define FIF_ROUNDMASK	(1 << (FIF_INTSHIFT - 1))
+# define FIF_MIN		(float)(1.0f / FIF_INTSHIFT)
+# define FIF_FRACPOW	(0xffffffff >> (FIF_SIZE - FIF_INTSHIFT))
+# define FIF_INTMASK	(0xffffffff ^ FIF_FRACPOW)
 
 int								toifix(t_fix fixed);
 t_fix							tofix(int num);

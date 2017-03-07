@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/30 13:20:51 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/20 16:46:18 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/03/07 15:39:42 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void			*render_thread(void *arg)
 
 	ctx = (t_w3dthr *)arg;
 	x = ctx->x;
-	while (x > 0)
+	while (x >= 0)
 	{
 		ctx->x = x;
 		ray = &(ctx->w3d->render.rays[x]);

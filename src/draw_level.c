@@ -6,7 +6,7 @@
 /*   By: qloubier <qloubier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:55:59 by qloubier          #+#    #+#             */
-/*   Updated: 2017/02/22 18:00:06 by qloubier         ###   ########.fr       */
+/*   Updated: 2017/03/07 15:38:32 by qloubier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ float			w3d_drawplane(t_w3d *w3d, t_w3dlvl *lvl, t_v2i *px, t_v2f l)
 				mxabsf(pos.y) + 0.5f), (dist < 0.0) ? bloc->gtex : bloc->rtex),
 				(t_v3f){0.0f, 0.0f, (dist < 0.0) ? 1.0f : -1.0f});
 	else
-		((t_ui *)w3d->screen->pixels)[i] =
-			*((t_ui *)&(bloc->color));
+		((t_ui *)w3d->screen->pixels)[i] = *((t_ui *)&(bloc->color));
 	return (1.0f);
 }
 
